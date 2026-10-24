@@ -1,0 +1,259 @@
+# 规则库 v1 —— 温室气体排放披露核查
+# 适用对象：A 股强制披露主体（上证180 / 科创50 / 深证100 / 创业板指成分股 + A+H 公司）
+# 报告期：2025 年度可持续发展报告（2026-04-30 前披露）
+#
+# 依据文件（均为公开原文，可直接下载核对）：
+#   1. 财政部《企业可持续披露准则第 1 号——气候（试行）》，2025-12-25 印发
+#      https://kjs.mof.gov.cn/zhengcefabu/202512/t20251225_3980202.htm
+#   2. 上交所《上市公司可持续发展报告编制指南 第二号 应对气候变化》
+#      https://www.sse.com.cn/lawandrules/guide/stock/kcbxxpljg/c/10777809/files/
+#   3. 沪深北交易所《上市公司可持续发展报告指引》，2024-05-01 实施
+#
+# 核查边界声明（写入产品首页，不是免责声明，是产品定位）：
+#   本工具只做 L1 存在性 + L2 规范性核查。
+#   L3 实质性判断（数据是否可信、减排路径是否合理、是否存在漂绿）
+#   明确不做，必须由审计机构或专业顾问完成。
+#
+# 字段说明：
+#   level        L1 存在性 / L2 规范性（本项目只覆盖这两层）
+#   severity     high 强制项缺失 / medium 规范性缺陷 / low 鼓励项未做
+#   check_type   presence 是否存在 | format 格式 | unit 单位 | consistency 一致性 | cross_ref 交叉引用
+#   auto         机器可独立判定 = true；需人工 = false
+
+meta:
+  version: v1.0
+  domain: esg-climate
+  market: cn-a-share
+  scope: greenhouse-gas-only
+  rule_count: 10
+  created: "2026-10-23"
+
+rules:
+
+  - id: GHG-01
+    name: 范围一温室气体排放总量
+    level: L1
+    severity: high
+    authority:
+      - 财政部准则第 32 条：范围一和范围二应分别披露
+      - 上交所指南 表 10：范围一 = 拥有或控制的排放源的直接排放
+    requirement: 披露报告期内范围一温室气体排放绝对量，单位为吨二氧化碳当量（tCO2e）
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 报告中是否存在明确的「范围一」或「直接温室气体排放」数值
+      - check_type: unit
+        auto: true
+        desc: 单位是否为 tCO2e；若用「万吨」「吨碳」，是否给出换算说明
+      - check_type: consistency
+        auto: false
+        desc: 是否与上年同口径可比，或说明不可比原因
+    fail_if:
+      - 只披露「碳排放总量」合并值，未拆分范围一与范围二
+      - 只给排放强度，未给绝对量
+      - 单位标注为「吨碳」而非「吨二氧化碳当量」且无换算
+    evidence_required: true
+    human_review: 若企业声明某类排放源「不适用」（如无工业过程排放），需人工判断理由是否成立
+
+  - id: GHG-02
+    name: 范围二排放量（基于位置）
+    level: L1
+    severity: high
+    authority:
+      - 财政部准则第 33 条：应披露基于位置的范围二排放总量
+    requirement: 披露基于位置（location-based）的范围二排放总量
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 是否存在范围二数值
+      - check_type: format
+        auto: true
+        desc: 是否明确标注为「基于位置」口径
+    fail_if:
+      - 只披露「基于市场」口径，未披露「基于位置」
+      - 范围二数值与范围一合并列示，无法区分
+    evidence_required: true
+    human_review: null
+
+  - id: GHG-03
+    name: 范围二排放量（基于市场）
+    level: L2
+    severity: low
+    authority:
+      - 财政部准则第 33 条：企业「也可以」披露基于市场的范围二排放总量（非强制）
+    requirement: 若披露基于市场口径，须说明所依据的合同或绿证信息
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 是否披露基于市场口径（未披露不构成缺陷）
+      - check_type: cross_ref
+        auto: true
+        desc: 若披露，是否给出绿电合同/绿证/能源属性证书的依据
+    fail_if:
+      - 披露了基于市场口径但未说明绿电来源
+      - 基于市场数值低于基于位置但无任何解释
+    evidence_required: true
+    human_review: 非强制项，缺失只记录不判违规
+    note: 这一条是区分「懂行」和「不懂行」的地方——很多工具会把它当强制项误报
+
+  - id: GHG-04
+    name: 组织边界界定方法
+    level: L1
+    severity: high
+    authority:
+      - 上交所指南 表 9：股权比例法 / 财务控制权法 / 运营控制权法
+      - 财政部准则：确定组织边界，选定一种合并方法并一贯应用
+    requirement: 明确说明采用哪一种组织边界界定方法，并说明合并范围
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 是否明确写出三种方法之一（股权比例法 / 财务控制权法 / 运营控制权法）
+      - check_type: consistency
+        auto: true
+        desc: 是否说明与上年一致；若变更，是否说明原因并重述上年数据
+      - check_type: cross_ref
+        auto: false
+        desc: 合并范围是否与财务报告的合并范围一致；不一致处是否说明
+    fail_if:
+      - 只写「合并范围与财务报告一致」，未指明具体采用哪种方法
+      - 报告期内变更方法但未重述上年数据
+    evidence_required: true
+    human_review: 边界变更年份的重述是否完整
+    note: 这是「口径不一」的核心来源，也是本项目最值钱的一条
+
+  - id: GHG-05
+    name: 运营边界与排放源识别
+    level: L2
+    severity: medium
+    authority:
+      - 上交所指南：确定运营边界后，识别边界内相关排放源
+    requirement: 说明运营边界内包含的排放源类型
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 是否列出范围一排放源类型（固定燃烧 / 移动燃烧 / 逸散排放 / 工艺排放）
+      - check_type: presence
+        auto: true
+        desc: 是否列出范围二排放源类型（外购电力 / 蒸汽 / 供热 / 制冷）
+    fail_if:
+      - 只写「范围一排放」不说明包含哪些源
+      - 存在明显应纳入的业务（如自有车队）但未在排放源清单中出现
+    evidence_required: true
+    human_review: 业务与排放源清单是否匹配，需要行业常识
+
+  - id: GHG-06
+    name: 核算标准与排放因子来源
+    level: L2
+    severity: high
+    authority:
+      - 财政部准则第 31 条：应披露核算方法、输入值、假设，包括活动数据与排放因子
+    requirement: 说明核算依据的标准、方法，以及排放因子的来源
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 是否说明核算标准（GHG Protocol / ISO 14064 / 国家行业核算指南）
+      - check_type: presence
+        auto: true
+        desc: 是否说明排放因子来源（国家温室气体排放因子数据库 / IPCC / 供应商提供）
+      - check_type: consistency
+        auto: false
+        desc: 因子来源是否跨年一致
+    fail_if:
+      - 只写「参照国际通行标准」，未指明具体标准名称与版本
+      - 未提及排放因子来源
+    evidence_required: true
+    human_review: null
+
+  - id: GHG-07
+    name: 基准年与基准年排放
+    level: L2
+    severity: medium
+    authority:
+      - 财政部准则：核算方法、输入值变更需说明原因
+      - GRI 102-5-d（国际对照）：应报告基准年、选取理由、基准年排放量
+    requirement: 若设定减排目标，须披露基准年、基准年排放量及重算规则
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 是否披露基准年份
+      - check_type: presence
+        auto: true
+        desc: 是否披露基准年排放量数值
+      - check_type: consistency
+        auto: true
+        desc: 是否说明基准年重算的条件与历史重述
+    fail_if:
+      - 设定了「2030 年碳达峰」类目标但未给基准年排放量
+      - 基准年数据被调整但未说明
+    evidence_required: true
+    human_review: null
+
+  - id: GHG-08
+    name: 排放强度指标
+    level: L2
+    severity: low
+    authority:
+      - 指引鼓励披露（非强制）
+    requirement: 若披露强度指标，须说明分母口径
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 是否披露排放强度
+      - check_type: format
+        auto: true
+        desc: 分母是否明确（营业收入 / 产品产量 / 建筑面积等）
+      - check_type: consistency
+        auto: false
+        desc: 分母口径是否前后年度一致
+    fail_if:
+      - 披露强度但未说明分母
+      - 分母口径在报告内不同章节不一致
+    evidence_required: true
+    human_review: 分母选择是否具有行业合理性
+
+  - id: GHG-09
+    name: 范围三排放
+    level: L2
+    severity: medium
+    authority:
+      - 财政部准则第 34 条：应确定并披露范围三计量所包含的类别
+      - 财政部准则第 36 条：优先使用直接计量数据
+    requirement: 披露范围三是否核算、覆盖哪几类、数据获取方式
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 是否说明范围三是否纳入核算
+      - check_type: presence
+        auto: true
+        desc: 若纳入，是否列出覆盖的类别（GHG Protocol 15 类中的哪几类）
+      - check_type: format
+        auto: true
+        desc: 是否说明数据来源为初级数据还是次级数据/估算
+    fail_if:
+      - 声明「范围三不适用」但未说明理由
+      - 给出范围三总量但未说明覆盖类别（无法判断完整性）
+    evidence_required: true
+    human_review: 当前阶段范围三多为鼓励性，缺失记录但不判违规
+
+  - id: GHG-10
+    name: 第三方鉴证
+    level: L2
+    severity: medium
+    authority:
+      - 指引鼓励；财政部准则：数据确认需提供证据证明数据质量
+    requirement: 若声明经第三方审验，须说明机构、范围、保证等级
+    checks:
+      - check_type: presence
+        auto: true
+        desc: 是否存在鉴证/审验声明
+      - check_type: format
+        auto: true
+        desc: 是否说明鉴证机构名称
+      - check_type: format
+        auto: true
+        desc: 是否说明鉴证范围（哪些指标）与保证等级（有限保证 / 合理保证）
+    fail_if:
+      - 笼统写「经第三方审验」但无机构名称
+      - 声明鉴证但未说明覆盖哪些指标
+    evidence_required: true
+    human_review: null

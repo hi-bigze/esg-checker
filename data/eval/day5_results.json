@@ -1,0 +1,416 @@
+{
+  "summary": {
+    "total": 20,
+    "consistent": 18,
+    "rate": "18/20=90%",
+    "triage": {
+      "自动放行": 14,
+      "抽查": 6,
+      "人工复核": 0
+    },
+    "high_miss": 0,
+    "note": "Day5 重跑，temperature=0 下结果可能与 Day4 略有波动"
+  },
+  "details": [
+    {
+      "rule_id": "GHG-01",
+      "rule_name": "范围一温室气体排放总量",
+      "report": "changan",
+      "gt": "是",
+      "machine": "是",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "190,728",
+      "unit": "吨二氧化碳当量",
+      "page": 29,
+      "evidence": "范围一 单位 吨二氧化碳当量 2025年 190,728",
+      "reason": "报告按吨二氧化碳当量披露了2025年范围一温室气体排放绝对量190,728吨，且与范围二分列，符合要求。",
+      "evidence_pages": [
+        29,
+        122,
+        136
+      ]
+    },
+    {
+      "rule_id": "GHG-01",
+      "rule_name": "范围一温室气体排放总量",
+      "report": "jianghuai",
+      "gt": "是",
+      "machine": "是",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "75,558.81",
+      "unit": "吨二氧化碳当量",
+      "page": 93,
+      "evidence": "范围一 75,558.81 吨二氧化碳当量",
+      "reason": "报告在环境绩效表中单独披露了范围一温室气体排放绝对量75,558.81吨二氧化碳当量，单位规范，且与范围二拆分列示。",
+      "evidence_pages": [
+        93,
+        62,
+        94
+      ]
+    },
+    {
+      "rule_id": "GHG-02",
+      "rule_name": "范围二排放量（基于位置）",
+      "report": "changan",
+      "gt": "部分",
+      "machine": "部分",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "752,014",
+      "unit": "吨二氧化碳当量",
+      "page": 29,
+      "evidence": "范围二 吨二氧化碳当量 2025年 752,014",
+      "reason": "报告披露了范围二排放总量数值，但未标注该数值为「基于位置」口径，缺口径标注，故为部分。",
+      "evidence_pages": [
+        29,
+        122,
+        42
+      ]
+    },
+    {
+      "rule_id": "GHG-02",
+      "rule_name": "范围二排放量（基于位置）",
+      "report": "jianghuai",
+      "gt": "是",
+      "machine": "是",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "182,178.63",
+      "unit": "吨二氧化碳当量",
+      "page": 93,
+      "evidence": "范围二（基于位置） 182,178.63 吨二氧化碳当量",
+      "reason": "报告单独列示了基于位置的范围二排放量，口径标注清晰，且与范围一分列可区分。",
+      "evidence_pages": [
+        93,
+        94,
+        98
+      ]
+    },
+    {
+      "rule_id": "GHG-03",
+      "rule_name": "范围二排放量（基于市场）",
+      "report": "changan",
+      "gt": "否",
+      "machine": "否",
+      "match": true,
+      "conf": "medium",
+      "disposition": "抽查",
+      "value": "752,014",
+      "unit": "吨二氧化碳当量",
+      "page": 29,
+      "evidence": "范围二 吨二氧化碳当量 2025年 752,014；绿电购买量 兆瓦时 1,784.01 7.41；绿电使用占比 15.42",
+      "reason": "报告仅披露范围二排放总量，未区分基于市场与基于位置口径，也未说明基于市场口径所依据的合同或绿证信息，不满足披露要求。",
+      "evidence_pages": [
+        122,
+        29,
+        28
+      ]
+    },
+    {
+      "rule_id": "GHG-03",
+      "rule_name": "范围二排放量（基于市场）",
+      "report": "jianghuai",
+      "gt": "是",
+      "machine": "部分",
+      "match": false,
+      "conf": "medium",
+      "disposition": "抽查",
+      "value": "153,694.82",
+      "unit": "吨二氧化碳当量",
+      "page": 93,
+      "evidence": "范围二（基于市场） 153,694.82 吨二氧化碳当量……核算时已考虑外购绿电的影响。基于位置和基于市场的电力排放因子选取中国生态环保部发布的《关于发布2022年电力二氧化碳排放因子的公告》。",
+      "reason": "披露了基于市场范围二数值并提及考虑外购绿电影响，但未说明所依据的具体合同或绿证信息，且基于市场值低于基于位置值未作解释，披露不完整。",
+      "evidence_pages": [
+        93,
+        67,
+        2
+      ]
+    },
+    {
+      "rule_id": "GHG-04",
+      "rule_name": "组织边界界定方法",
+      "report": "changan",
+      "gt": "部分",
+      "machine": "部分",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "",
+      "unit": "",
+      "page": 29,
+      "evidence": "确保组织边界与财务合并口径完全一致",
+      "reason": "仅说明组织边界与财务合并口径一致，未指明具体采用哪一种组织边界界定方法（如运营控制权法或股权比例法），方法未指明。",
+      "evidence_pages": [
+        29,
+        122,
+        117
+      ]
+    },
+    {
+      "rule_id": "GHG-04",
+      "rule_name": "组织边界界定方法",
+      "report": "jianghuai",
+      "gt": "部分",
+      "machine": "部分",
+      "match": true,
+      "conf": "medium",
+      "disposition": "抽查",
+      "value": "",
+      "unit": "",
+      "page": 93,
+      "evidence": "温室气体及综合能耗统计口径为并表范围内20家制造型企业以及技术中心、物流公司，其他环境数据统计口径为并表范围内18家制造型企业以及技术中心（不含已停止运营的新能源轻型物流车分公司、安徽江淮专用汽车有限公司）。",
+      "reason": "报告说明了温室气体核算的合并范围（并表范围内20家制造型企业及技术中心、物流公司），但未明确指明采用哪一种组织边界界定方法（如运营控制权法、财务控制权法或股权比例法），属方法未指明的不完整披露。",
+      "evidence_pages": [
+        93,
+        100,
+        27
+      ]
+    },
+    {
+      "rule_id": "GHG-05",
+      "rule_name": "运营边界与排放源识别",
+      "report": "changan",
+      "gt": "部分",
+      "machine": "部分",
+      "match": true,
+      "conf": "medium",
+      "disposition": "抽查",
+      "value": "",
+      "unit": "",
+      "page": 29,
+      "evidence": "范围三包括：类别1（外购商品和服务）、类别3（燃料和能源相关活动含未包括在范围一和范围二中的部分）、类别5（运营中产生的废弃物）、类别6（商务旅行）、类别7（雇员通勤）、类别11（售出产品的使用）、类别15（投资）",
+      "reason": "报告仅列示范围三的类别构成，未说明范围一、范围二运营边界内包含的具体排放源类型（如自有车队、固定燃烧等），排放源识别不完整。",
+      "evidence_pages": [
+        122,
+        34,
+        29
+      ]
+    },
+    {
+      "rule_id": "GHG-05",
+      "rule_name": "运营边界与排放源识别",
+      "report": "jianghuai",
+      "gt": "是",
+      "machine": "是",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "",
+      "unit": "",
+      "page": 93,
+      "evidence": "核算边界包括范围一（移动源、固定源燃烧、制程排放及逸散排放）和范围二（外购电力和热力，取基于市场值）",
+      "reason": "报告明确说明了运营边界内范围一包含移动源、固定源燃烧、制程排放及逸散排放等排放源类型，并列出范围二外购电力和热力，排放源识别完整规范。",
+      "evidence_pages": [
+        93,
+        51,
+        100
+      ]
+    },
+    {
+      "rule_id": "GHG-06",
+      "rule_name": "核算标准与排放因子来源",
+      "report": "changan",
+      "gt": "部分",
+      "machine": "部分",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "",
+      "unit": "",
+      "page": 29,
+      "evidence": "仍遵循国际通用的《温室气体核算体系》（GHG Protocol）标准",
+      "reason": "报告指明了核算标准为GHG Protocol，但未标注具体版本，且未提及排放因子来源，披露不完整。",
+      "evidence_pages": [
+        29,
+        27,
+        30
+      ]
+    },
+    {
+      "rule_id": "GHG-06",
+      "rule_name": "核算标准与排放因子来源",
+      "report": "jianghuai",
+      "gt": "是",
+      "machine": "是",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "",
+      "unit": "",
+      "page": 93,
+      "evidence": "温室气体排放核算遵循ISO 14064-1标准……基于位置和基于市场的电力排放因子选取中国生态环保部发布的《关于发布2022年电力二氧化碳排放因子的公告》。",
+      "reason": "已明确核算标准名称（ISO 14064-1）及电力排放因子来源（生态环境部2022年电力二氧化碳排放因子公告），满足要求。",
+      "evidence_pages": [
+        93,
+        100,
+        58
+      ]
+    },
+    {
+      "rule_id": "GHG-07",
+      "rule_name": "基准年与基准年排放",
+      "report": "changan",
+      "gt": "部分",
+      "machine": "部分",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "",
+      "unit": "",
+      "page": 28,
+      "evidence": "目标 企业端 2030年 降低 35% 万元产值二氧化碳排放 较2020年",
+      "reason": "报告设定了以2020年为基准年的减排目标，但未披露基准年（2020年）的排放量绝对值，也未说明基准年数据的重算规则，披露不完整。",
+      "evidence_pages": [
+        28,
+        22,
+        29
+      ]
+    },
+    {
+      "rule_id": "GHG-07",
+      "rule_name": "基准年与基准年排放",
+      "report": "jianghuai",
+      "gt": "否",
+      "machine": "否",
+      "match": true,
+      "conf": "medium",
+      "disposition": "抽查",
+      "value": "",
+      "unit": "",
+      "page": 100,
+      "evidence": "附录二：上交所指标索引 披露要求 对应的本报告章节 应对气候变化 共生·绿色发展－应对气候变化",
+      "reason": "报告片段未披露减排目标的基准年、基准年排放量及重算规则，索引亦未指向具体基准年数据。",
+      "evidence_pages": [
+        66,
+        100,
+        94
+      ]
+    },
+    {
+      "rule_id": "GHG-08",
+      "rule_name": "排放强度指标",
+      "report": "changan",
+      "gt": "是",
+      "machine": "是",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "0.0575",
+      "unit": "吨二氧化碳当量/万元",
+      "page": 120,
+      "evidence": "万元产值二氧化碳排放量（企业端）6 吨二氧化碳当量/万元 0.0617 0.0614 0.0575",
+      "reason": "报告披露了万元产值二氧化碳排放强度指标，分母口径为万元产值，并在绩效表中明确标注单位，口径一致。",
+      "evidence_pages": [
+        122,
+        28,
+        136
+      ]
+    },
+    {
+      "rule_id": "GHG-08",
+      "rule_name": "排放强度指标",
+      "report": "jianghuai",
+      "gt": "是",
+      "machine": "是",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "0.049",
+      "unit": "吨二氧化碳当量/人民币万元营收",
+      "page": 93,
+      "evidence": "范围一、二排放强度（万元营收） 0.049 吨二氧化碳当量/人民币万元营收",
+      "reason": "报告披露了范围一、二排放强度指标，并在指标名称中明确分母为万元营收，分母口径清晰。",
+      "evidence_pages": [
+        93,
+        44,
+        94
+      ]
+    },
+    {
+      "rule_id": "GHG-09",
+      "rule_name": "范围三排放",
+      "report": "changan",
+      "gt": "部分",
+      "machine": "部分",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "46,638,132",
+      "unit": "吨二氧化碳当量",
+      "page": 29,
+      "evidence": "范围三包括：类别1（外购商品和服务）、类别3（燃料和能源相关活动含未包括在范围一和范围二中的部分）、类别5（运营中产生的废弃物）、类别6（商务旅行）、类别7（雇员通勤）、类别11（售出产品的使用）、类别15（投资）；2025年 190,728 752,014 46,638,132",
+      "reason": "已披露范围三总量及覆盖的7个类别，但未说明数据获取方式，披露不完整。",
+      "evidence_pages": [
+        29,
+        122,
+        136
+      ]
+    },
+    {
+      "rule_id": "GHG-09",
+      "rule_name": "范围三排放",
+      "report": "jianghuai",
+      "gt": "否",
+      "machine": "部分",
+      "match": false,
+      "conf": "medium",
+      "disposition": "抽查",
+      "value": "",
+      "unit": "",
+      "page": 66,
+      "evidence": "公司每年制定重点车型供应商碳盘查计划，覆盖电池、钢铁、铝合金等关键物料，用于核算整车碳足迹",
+      "reason": "仅披露供应链碳盘查覆盖电池、钢铁、铝合金等关键物料及供应商数据填报，未明确说明范围三排放是否核算、覆盖的具体范围三类别及数据获取方式，内容不完整。",
+      "evidence_pages": [
+        62,
+        66,
+        100
+      ]
+    },
+    {
+      "rule_id": "GHG-10",
+      "rule_name": "第三方鉴证",
+      "report": "changan",
+      "gt": "否",
+      "machine": "否",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "",
+      "unit": "",
+      "page": 133,
+      "evidence": "2-5外部鉴证 所在章节/页码标注为「/」",
+      "reason": "GRI索引中外部鉴证条目章节与页码均标注为「/」，视为报告未披露第三方鉴证的机构、范围与保证等级。",
+      "evidence_pages": [
+        133,
+        53,
+        79
+      ]
+    },
+    {
+      "rule_id": "GHG-10",
+      "rule_name": "第三方鉴证",
+      "report": "jianghuai",
+      "gt": "是",
+      "machine": "是",
+      "match": true,
+      "conf": "high",
+      "disposition": "自动放行",
+      "value": "",
+      "unit": "",
+      "page": 101,
+      "evidence": "SGS集团已根据ISAE3000等国际公认的鉴证标准……鉴证标准 ISAE3000 有限保证……鉴证范围包括对详细列于下面的特定绩效信息的质量、准确性和可靠性进行评估",
+      "reason": "报告披露了第三方鉴证机构（SGS-CSTC）、鉴证标准（ISAE3000）、保证等级（有限保证）及鉴证范围，满足要求。",
+      "evidence_pages": [
+        101,
+        53,
+        51
+      ]
+    }
+  ]
+}

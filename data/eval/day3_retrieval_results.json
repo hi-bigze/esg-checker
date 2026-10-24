@@ -1,0 +1,284 @@
+{
+ "summary": {
+  "n": 17,
+  "recall@1": 10,
+  "recall@3": 12,
+  "recall@5": 13
+ },
+ "details": [
+  {
+   "rule_id": "GHG-01",
+   "report": "changan",
+   "disclosed": "是",
+   "truth": [
+    29,
+    122
+   ],
+   "top5": [
+    29,
+    122,
+    28,
+    31,
+    136
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-01",
+   "report": "jianghuai",
+   "disclosed": "是",
+   "truth": [
+    93
+   ],
+   "top5": [
+    93,
+    67,
+    94,
+    70,
+    52
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-02",
+   "report": "changan",
+   "disclosed": "部分",
+   "truth": [
+    29
+   ],
+   "top5": [
+    29,
+    122,
+    133,
+    123,
+    136
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-02",
+   "report": "jianghuai",
+   "disclosed": "是",
+   "truth": [
+    93
+   ],
+   "top5": [
+    93,
+    67,
+    70,
+    66,
+    64
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-03",
+   "report": "jianghuai",
+   "disclosed": "是",
+   "truth": [
+    93
+   ],
+   "top5": [
+    93,
+    64,
+    67,
+    100,
+    62
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-04",
+   "report": "changan",
+   "disclosed": "是",
+   "truth": [
+    29,
+    122
+   ],
+   "top5": [
+    119,
+    77,
+    113,
+    78,
+    29
+   ],
+   "hit_rank": 5
+  },
+  {
+   "rule_id": "GHG-04",
+   "report": "jianghuai",
+   "disclosed": "部分",
+   "truth": [
+    93
+   ],
+   "top5": [
+    27,
+    21,
+    25,
+    100,
+    2
+   ],
+   "hit_rank": null
+  },
+  {
+   "rule_id": "GHG-05",
+   "report": "changan",
+   "disclosed": "部分",
+   "truth": [
+    122
+   ],
+   "top5": [
+    34,
+    24,
+    41,
+    29,
+    30
+   ],
+   "hit_rank": null
+  },
+  {
+   "rule_id": "GHG-05",
+   "report": "jianghuai",
+   "disclosed": "是",
+   "truth": [
+    93
+   ],
+   "top5": [
+    17,
+    62,
+    65,
+    66,
+    64
+   ],
+   "hit_rank": null
+  },
+  {
+   "rule_id": "GHG-06",
+   "report": "changan",
+   "disclosed": "部分",
+   "truth": [
+    29
+   ],
+   "top5": [
+    27,
+    29,
+    28,
+    30,
+    136
+   ],
+   "hit_rank": 2
+  },
+  {
+   "rule_id": "GHG-06",
+   "report": "jianghuai",
+   "disclosed": "是",
+   "truth": [
+    93
+   ],
+   "top5": [
+    93,
+    67,
+    62,
+    100,
+    52
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-07",
+   "report": "changan",
+   "disclosed": "部分",
+   "truth": [
+    28
+   ],
+   "top5": [
+    28,
+    22,
+    122,
+    21,
+    24
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-08",
+   "report": "changan",
+   "disclosed": "是",
+   "truth": [
+    122
+   ],
+   "top5": [
+    28,
+    122,
+    124,
+    20,
+    29
+   ],
+   "hit_rank": 2
+  },
+  {
+   "rule_id": "GHG-08",
+   "report": "jianghuai",
+   "disclosed": "是",
+   "truth": [
+    93
+   ],
+   "top5": [
+    93,
+    67,
+    17,
+    62,
+    61
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-09",
+   "report": "changan",
+   "disclosed": "部分",
+   "truth": [
+    29
+   ],
+   "top5": [
+    29,
+    27,
+    137,
+    132,
+    133
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-10",
+   "report": "changan",
+   "disclosed": "否",
+   "truth": [
+    133
+   ],
+   "top5": [
+    133,
+    138,
+    54,
+    137,
+    108
+   ],
+   "hit_rank": 1
+  },
+  {
+   "rule_id": "GHG-10",
+   "report": "jianghuai",
+   "disclosed": "是",
+   "truth": [
+    101
+   ],
+   "top5": [
+    50,
+    8,
+    51,
+    10,
+    53
+   ],
+   "hit_rank": null
+  }
+ ]
+}

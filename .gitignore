@@ -1,0 +1,16 @@
+# 虚拟环境与运行产物
+venv/
+__pycache__/
+*.log
+.gradio/
+
+# 报告原文（巨潮公开渠道可自行下载，共 68MB 不入仓库）
+data/reports/
+
+# OCR 缓存（可由脚本重建）
+data/eval/ocr_cache.json
+
+# 下载过程的临时检索结果
+ca.json
+jh.json
+list_*.json
