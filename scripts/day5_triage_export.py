@@ -5,7 +5,15 @@
   data/eval/day5_results.json      完整字段(含 value/unit/evidence) + 分流类别
   outputs/核查报告_底稿.md          可交付的核查报告底稿(带复核状态列)
 """
-import os, sys, re, csv, json, time, importlib.util
+import os, sys, re, csv, json, time, importlib.util, logging
+
+# 审计日志: 每次评测运行的判定与分流决策落文件，可追溯（谁在何时跑出了什么结论）
+os.makedirs("logs", exist_ok=True)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    handlers=[logging.FileHandler(f"logs/audit_{time.strftime('%Y%m%d')}.log", encoding="utf-8")])
+log = logging.getLogger("audit")
 
 # 自审①: 不假设环境变量存在——本机用户环境变量里有 key，注册表兜底读取
 if "DEEPSEEK_API_KEY" not in os.environ:
@@ -63,6 +71,8 @@ def main():
             "reason": res.get("reason", ""), "evidence_pages": evidence[:3],
         })
         print(f"[{len(results):2d}] {rid:7s} {rep:9s} {res['judgment']}({res.get('confidence','')}) -> {cat}")
+        log.info(f"{rid} {rep} judgment={res['judgment']} conf={res.get('confidence','')} "
+                 f"disposition={cat} evidence_pages={evidence[:3]}")
 
     # 自审②: 分流结果必须覆盖全部 20 条
     assert len(results) == 20 and all(r["disposition"] for r in results), "分流存在空类别"
@@ -81,6 +91,8 @@ def main():
                "details": results},
               open(OUT_JSON, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     print(f"[2] {OUT_JSON} 落盘: 一致 {agree}/20, high错判 {len(high_miss)} 条")
+    log.info(f"run done | consistent={agree}/20 | high_miss={len(high_miss)} | "
+             f"triage={ {c: sum(1 for r in results if r['disposition']==c) for c in ('自动放行','抽查','人工复核')} }")
 
     # ---------- markdown 底稿 ----------
     lines = ["# ESG 温室气体披露核查报告（底稿）", "",
