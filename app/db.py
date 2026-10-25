@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS users(
     username TEXT UNIQUE NOT NULL,
     pw_salt TEXT NOT NULL,
     pw_hash TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'reviewer',   -- 角色：reviewer=复核员 / admin=管理员（看板仅 admin）
     created_at TEXT DEFAULT (datetime('now','localtime'))
 );
 CREATE TABLE IF NOT EXISTS check_runs(
@@ -57,11 +58,19 @@ CREATE TABLE IF NOT EXISTS events(
 def init_db():
     conn = get_conn()
     conn.executescript(SCHEMA)
-    # 种子账号（演示用，密码可在界面不改则保持）
+    # 旧库迁移：users 表若无 role 列则补上（存量账号默认复核员）
+    cols = [r[1] for r in conn.execute("PRAGMA table_info(users)").fetchall()]
+    if "role" not in cols:
+        conn.execute("ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'reviewer'")
+    # 种子账号（演示用）：reviewer=复核员，admin=管理员
     if not conn.execute("SELECT 1 FROM users WHERE username='demo'").fetchone():
         salt = os.urandom(8).hex()
-        conn.execute("INSERT INTO users(username,pw_salt,pw_hash) VALUES(?,?,?)",
-                     ("demo", salt, hash_pw("demo1234", salt)))
+        conn.execute("INSERT INTO users(username,pw_salt,pw_hash,role) VALUES(?,?,?,?)",
+                     ("demo", salt, hash_pw("demo1234", salt), "reviewer"))
+    if not conn.execute("SELECT 1 FROM users WHERE username='admin'").fetchone():
+        salt = os.urandom(8).hex()
+        conn.execute("INSERT INTO users(username,pw_salt,pw_hash,role) VALUES(?,?,?,?)",
+                     ("admin", salt, hash_pw("admin1234", salt), "admin"))
     conn.commit()
     conn.close()
 

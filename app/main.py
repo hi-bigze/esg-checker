@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from app import db
 
 app = FastAPI(title="ESG 披露核查 Agent")
-SESSIONS = {}  # token -> username（单机内存 session；多实例部署时换 Redis，接口不变）
+SESSIONS = {}  # token -> {username, role}（单机内存 session；多实例部署时换 Redis，接口不变）
 
 class LoginReq(BaseModel):
     username: str
@@ -21,11 +21,16 @@ class ReviewReq(BaseModel):
     verdict: str
     comment: str = ""
 
-def require_auth(request: Request) -> str:
+def require_auth(request: Request) -> dict:
     token = request.cookies.get("session")
     if not token or token not in SESSIONS:
         raise HTTPException(401, "未登录或会话过期")
     return SESSIONS[token]
+
+def require_role(session: dict, *roles: str) -> None:
+    """权限校验：当前会话角色不在允许列表内则拒绝（403）"""
+    if session["role"] not in roles:
+        raise HTTPException(403, "当前角色无权访问该功能")
 
 @app.on_event("startup")
 def startup():
@@ -47,10 +52,11 @@ def login(req: LoginReq, response: Response):
     if not u or db.hash_pw(req.password, u["pw_salt"]) != u["pw_hash"]:
         raise HTTPException(401, "用户名或密码错误")
     token = secrets.token_hex(16)
-    SESSIONS[token] = req.username
+    role = u["role"] or "reviewer"
+    SESSIONS[token] = {"username": req.username, "role": role}
     response.set_cookie("session", token, httponly=True, samesite="lax")
     conn = db.get_conn(); db.log_event(conn, req.username, "login"); conn.commit(); conn.close()
-    return {"ok": True, "username": req.username}
+    return {"ok": True, "username": req.username, "role": role}
 
 @app.post("/api/logout")
 def logout(request: Request, response: Response):
@@ -61,7 +67,8 @@ def logout(request: Request, response: Response):
 
 # ---------- 业务数据 ----------
 @app.get("/api/results")
-def results(username: str = Depends(require_auth)):
+def results(session: dict = Depends(require_auth)):
+    """核查结果：登录即可见（reviewer / admin）"""
     conn = db.get_conn()
     rows = [dict(r) for r in conn.execute(
         "SELECT cr.*, (SELECT verdict FROM review_actions ra WHERE ra.run_id=cr.id "
@@ -70,7 +77,9 @@ def results(username: str = Depends(require_auth)):
     return {"results": rows}
 
 @app.post("/api/review")
-def review(req: ReviewReq, request: Request, username: str = Depends(require_auth)):
+def review(req: ReviewReq, request: Request, session: dict = Depends(require_auth)):
+    """提交复核：复核员与管理员都可操作"""
+    require_role(session, "reviewer", "admin")
     if req.verdict not in ("同意机器判定", "需修改", "证据不足待定"):
         raise HTTPException(400, "非法复核结论")
     conn = db.get_conn()
@@ -78,13 +87,15 @@ def review(req: ReviewReq, request: Request, username: str = Depends(require_aut
     if not run:
         conn.close(); raise HTTPException(404, "核查记录不存在")
     conn.execute("INSERT INTO review_actions(run_id,username,verdict,comment) VALUES(?,?,?,?)",
-                 (req.run_id, username, req.verdict, req.comment))
-    db.log_event(conn, username, "submit_review", f"run={req.run_id} verdict={req.verdict}")
+                 (req.run_id, session["username"], req.verdict, req.comment))
+    db.log_event(conn, session["username"], "submit_review", f"run={req.run_id} verdict={req.verdict}")
     conn.commit(); conn.close()
     return {"ok": True}
 
 @app.get("/api/board")
-def board(username: str = Depends(require_auth)):
+def board(session: dict = Depends(require_auth)):
+    """运营看板：内部运营视图，仅管理员可见（403 拒绝复核员与游客）"""
+    require_role(session, "admin")
     conn = db.get_conn()
     q = lambda sql: conn.execute(sql).fetchone()[0]
     stats = {
