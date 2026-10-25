@@ -14,3 +14,6 @@ data/eval/ocr_cache.json
 ca.json
 jh.json
 list_*.json
+data/app.db
+logs/
+启动复核台.bat

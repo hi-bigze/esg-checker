@@ -58,6 +58,25 @@ flowchart LR
 - **输出契约**：先定 JSON schema 再调模型；代码层校验 judgment 与 reason 的逻辑一致性，发现自相矛盾自动重问
 - **人机边界**：置信度分层实测——high 12 条 0 错判、medium 8 条集中全部 2 条错判。错误率分层支撑分流策略，不靠拍脑袋
 
+### 3.1 应用层（Web 服务）
+
+```
+浏览器（单页应用，原生 JS） ── HTTP JSON ──> FastAPI ──> SQLite
+                                               │
+                                               └─ session 鉴权（httpOnly cookie token）
+```
+
+| 层 | 实现 | 选型理由 |
+|---|---|---|
+| 前端 | 原生 JS 单页应用（介绍 / 核查结果 / 人工复核 / 运营看板 四视图） | 无构建步骤，POC 阶段复杂度为零 |
+| 后端 | FastAPI，JSON 接口契约：`/api/login` `/api/results` `/api/review` `/api/board` | 前端不直接碰数据，所有访问走接口层 |
+| 数据库 | SQLite 四张表：users / check_runs / review_actions / events | 单机、无并发、零运维；生产化换 PostgreSQL 只动 `get_conn()` |
+| 鉴权 | 用户名密码（加盐哈希）+ 服务端 session token（httpOnly cookie） | 复核动作绑定账号，未登录 401 拦截 |
+| 日志 | 评测管线落 `logs/audit_日期.log`；Web 层 events 表记使用行为 | 排障有据、使用可审计 |
+| 部署 | 开发本机 → 演示期按量计费云服务器 3 天 | POC 不为「第二年还要用」付钱 |
+
+**运营闭环**：登录/查结果/提交复核均记入 events 表 → 看板页聚合为使用量、复核修改率、高错判规则 Top3 → 修改率高的规则进入规则库修订候选。「使用 → 复核 → 迭代」闭环，看板不是摆设，是规则库的迭代输入。
+
 ## 4. 评测（全部实测，样本：长安汽车 + 江淮汽车 2025 年度 ESG 报告）
 
 | 指标 | 数字 | 说明 |
@@ -71,7 +90,7 @@ flowchart LR
 
 Ground truth 为 20 条人工标注（指标在不在、第几页、原文引用），**标注过程发现并修正了 AI 预判的 3 处错误**——包括一次人工验算推翻「脚注自相矛盾」预判，和一次人工复核修正自身双标（GHG-04）。评测是双向的：模型输出被审计，基准数据也被审计。
 
-## 5. 关键工程决策与翻车记录（节选，完整版见 docs/翻车记录.md）
+## 5. 关键工程决策与翻车记录（节选）
 
 | 问题 | 定位 | 解法 |
 |---|---|---|
@@ -79,7 +98,7 @@ Ground truth 为 20 条人工标注（指标在不在、第几页、原文引用
 | Excel 保存的「csv」实为 xlsx 格式且逗号拆列 | 文件头 `PK` 识别出真实格式 | 读入后按 schema 重建基准表 |
 | 检索评测首次跑出 0%，但真值明明在 top5 | 打印中间变量：top5 元素是 `(report, page)` 元组，真值是 int，比较恒 False | 修比较逻辑，复跑得真实基线 53% |
 | LLM 输出 judgment=否 但 reason=「满足要求」 | 温度 0 也会字段间自相矛盾 | prompt 自查 + 代码正则检测自动重问 |
-| 本地服务「能跑一次」但再次打开已死 | 端口探测确认无监听：临时后台进程被父会话连带终止 | 启动脚本固化（启动复核台.bat），可复现性不靠记忆 |
+| 本地服务「能跑一次」但再次打开已死 | 端口探测确认无监听：临时后台进程被父会话连带终止 | 启动脚本固化，可复现性不靠记忆 |
 
 ## 6. 快速开始
 
@@ -91,14 +110,14 @@ venv\Scripts\python -m pip install -r requirements.txt
 # 2. 配置 LLM key（环境变量，不进代码）
 setx DEEPSEEK_API_KEY "sk-..."
 
-# 3. 启动人工复核台 → 浏览器打开 http://127.0.0.1:7860
-#    Windows: 双击 启动复核台.bat
-venv\Scripts\python scripts\day5_review_app.py
+# 3. 启动 Web 应用 → 浏览器打开 http://127.0.0.1:8000
+#    演示账号：demo / demo1234
+venv\Scripts\python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
-# 4. 复现评测（检索召回 + 全量对打）
+# 4. 复现评测（检索召回 + 全量对打 + 分流导出）
 venv\Scripts\python scripts\day3_retrieval_eval.py
 venv\Scripts\python scripts\day4_full_eval.py
-venv\Scripts\python scripts\day5_triage_export.py   # 分流 + 导出底稿
+venv\Scripts\python scripts\day5_triage_export.py
 ```
 
 数据来源：巨潮资讯网公开披露的报告原文（`data/reports/`，体积大不入仓库，见 .gitignore）。示例报告：长安汽车（000625）、江淮汽车（600418）2025 年度 ESG 报告。
