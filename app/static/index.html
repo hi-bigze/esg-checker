@@ -1,203 +1,384 @@
 <!DOCTYPE html>
-<html lang="zh" data-page-node-id="BO2ScsEbqTwsLhhxvbCQOr">
-<head data-page-node-id="gn6Ek1B0eIe2LRGKs944Gr">
-<meta charset="utf-8" data-page-node-id="GZwWQPZJEOSfQOJgy48q3B">
+<html lang="zh" data-page-node-id="zzRQNLRDUhD4uFEgdrnDqm">
+<head data-page-node-id="4ucCM33T1Cve4JJ4tRYr8G">
+<meta charset="utf-8" data-page-node-id="xdwmC3PQnNuRWwwixjzcDw">
 <title>ESG 披露核查 Agent</title>
 <style>
-  :root { --blue:#2f6fed; --bg:#f7f9fc; --card:#ffffff; --ink:#1c2430; --muted:#68758a; --purple:#7b5cf0; }
-  * { box-sizing:border-box; margin:0; }
-  body { font-family:"Microsoft YaHei",system-ui,sans-serif; background:var(--bg); color:var(--ink); }
-  header { background:var(--card); border-bottom:1px solid #e5eaf2; padding:14px 28px; display:flex; align-items:center; gap:24px; }
-  header h1 { font-size:17px; color:var(--blue); }
-  nav button { border:none; background:none; padding:8px 14px; font-size:14px; color:var(--muted); cursor:pointer; border-radius:8px; }
-  nav button.active { background:var(--blue); color:#fff; }
-  #user { margin-left:auto; font-size:13px; color:var(--muted); }
-  main { max-width:1100px; margin:24px auto; padding:0 20px; }
-  .card { background:var(--card); border:1px solid #e5eaf2; border-radius:12px; padding:24px; margin-bottom:16px; }
-  h2 { font-size:16px; margin-bottom:12px; }
-  .pill { display:inline-block; padding:2px 10px; border-radius:10px; font-size:12px; }
-  .p-high { background:#e5f0ff; color:var(--blue); } .p-medium { background:#fff4e0; color:#b26a00; }
-  .p-low { background:#fde5e5; color:#c0392b; } .p-purple { background:#efe9ff; color:var(--purple); }
-  table { width:100%; border-collapse:collapse; font-size:13px; }
-  th,td { text-align:left; padding:8px 10px; border-bottom:1px solid #eef1f6; vertical-align:top; }
-  th { color:var(--muted); font-weight:600; }
-  input,select,textarea { border:1px solid #d8e0ec; border-radius:8px; padding:8px 10px; font-size:14px; width:100%; }
-  .btn { background:var(--blue); color:#fff; border:none; border-radius:8px; padding:9px 18px; cursor:pointer; font-size:14px; }
-  .btn.sec { background:#eef2fb; color:var(--blue); }
-  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
-  .stat { background:#f2f6ff; border-radius:10px; padding:14px; }
-  .stat b { font-size:22px; color:var(--blue); display:block; }
-  .stat span { font-size:12px; color:var(--muted); }
-  .hide { display:none; }
-  .muted { color:var(--muted); font-size:13px; }
-  li { margin:6px 0; line-height:1.7; font-size:14px; }
-  p { line-height:1.8; font-size:14px; }
+  :root{
+    --blue:#185FA5; --blue-2:#378ADD; --blue-bd:#B5D4F4; --blue-bg:#E6F1FB;
+    --purple:#534AB7; --purple-2:#7F77DD; --purple-bg:#EEEDFE;
+    --amber-bg:#FAEEDA; --amber-tx:#854F0B; --red-bg:#FCEBEB; --red-tx:#A32D2D;
+    --ink:#1c2430; --muted:#68758a; --hint:#98a3b5;
+    --bg:#f6f8fb; --card:#ffffff; --line:#e5eaf2; --soft:#f2f5fa;
+    --r:8px; --r2:12px; --shadow:0 1px 3px rgba(28,36,48,.06);
+  }
+  *{box-sizing:border-box;margin:0}
+  body{font-family:"Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+  header{background:var(--card);border-bottom:1px solid var(--line);padding:10px 24px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:10}
+  .logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--blue)}
+  .logo i{width:18px;height:18px;border-radius:5px;background:var(--blue);display:inline-block}
+  nav{display:flex;gap:2px;margin-left:8px}
+  nav button{border:none;background:none;padding:7px 14px;font-size:13px;color:var(--muted);cursor:pointer;border-radius:var(--r)}
+  nav button:hover{background:var(--soft)}
+  nav button.active{background:var(--blue);color:#fff}
+  .top-right{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+  .top-right button{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:5px 12px;font-size:12px;color:var(--muted);cursor:pointer}
+  .top-right button:hover{border-color:var(--blue-bd);color:var(--blue)}
+  main{max-width:1080px;margin:24px auto;padding:0 20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:22px 24px;margin-bottom:14px;box-shadow:var(--shadow)}
+  h2{font-size:15px;font-weight:600;margin-bottom:12px}
+  .pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:12px;line-height:1.7}
+  .p-high{background:var(--blue-bg);color:var(--blue)} .p-medium{background:var(--amber-bg);color:var(--amber-tx)}
+  .p-low{background:var(--red-bg);color:var(--red-tx)} .p-purple{background:var(--purple-bg);color:var(--purple)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;white-space:nowrap}
+  tbody tr.rowlink{cursor:pointer}
+  tbody tr.rowlink:hover{background:var(--soft)}
+  input,select,textarea{border:1px solid #d8e0ec;border-radius:var(--r);padding:8px 10px;font-size:13px;width:100%;background:var(--card);color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue-2);box-shadow:0 0 0 3px rgba(55,138,221,.12)}
+  .btn{background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;cursor:pointer;font-size:13px}
+  .btn:hover{background:#14508d}
+  .btn.sec{background:var(--card);color:var(--blue);border:1px solid var(--blue-bd)}
+  .btn.pv{background:var(--purple)} .btn.pv:hover{background:#443c99}
+  .btn.sm{padding:6px 12px;font-size:12px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{background:var(--soft);border-radius:var(--r);padding:14px 16px}
+  .stat b{font-size:22px;font-weight:600;color:var(--blue);display:block}
+  .stat.pv b{color:var(--purple)}
+  .stat span{font-size:12px;color:var(--muted)}
+  .hide{display:none}
+  .muted{color:var(--muted);font-size:13px}
+  .hint{color:var(--hint);font-size:12px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .chips span{font-size:12px;border-radius:10px;padding:4px 12px;background:var(--soft);color:var(--muted)}
+  .toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .toolbar select{width:120px}
+  .toolbar input{flex:1}
+  .detail-cell td{background:var(--soft);padding:14px 16px}
+  .evi{background:var(--card);border:1px solid var(--purple-bg);border-left:3px solid var(--purple);border-radius:var(--r);padding:10px 14px;font-size:13px;line-height:1.7;margin:8px 0}
+  .evi b{color:var(--purple);font-weight:600;font-size:12px;display:block;margin-bottom:2px}
+  .split{display:grid;grid-template-columns:1fr 1.8fr;gap:14px;align-items:start}
+  .queue-item{border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:12px;cursor:pointer;margin-bottom:8px;line-height:1.6}
+  .queue-item:hover{border-color:var(--blue-bd)}
+  .queue-item.sel{border:2px solid var(--purple);background:var(--purple-bg)}
+  .queue-item.done{opacity:.55}
+  .verdicts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .bar-row{display:grid;grid-template-columns:150px 1fr 46px;gap:10px;align-items:center;font-size:12px;margin:8px 0}
+  .bar{height:14px;border-radius:7px;background:var(--soft);overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:7px}
+  .bar i.b{background:var(--blue-2)} .bar i.p{background:var(--purple-2)} .bar i.a{background:#EF9F27}
+  .mask{position:fixed;inset:0;background:rgba(28,36,48,.4);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .modal{background:var(--card);border-radius:var(--r2);width:420px;max-width:100%;padding:24px 28px;box-shadow:0 10px 30px rgba(28,36,48,.2)}
+  .modal .tag{font-size:12px;color:var(--purple);background:var(--purple-bg);border-radius:10px;padding:2px 12px}
+  .modal h3{font-size:15px;font-weight:600;margin:14px 0 8px}
+  .modal p{font-size:13px;color:var(--muted);line-height:1.8}
+  .dots{display:flex;gap:6px}
+  .dots i{width:6px;height:6px;border-radius:50%;background:#d3d1c7}
+  .dots i.on{background:var(--purple)}
+  .m-foot{display:flex;align-items:center;margin-top:18px}
+  .skip{font-size:12px;color:var(--hint);cursor:pointer;background:none;border:none}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;border-radius:var(--r);padding:10px 20px;z-index:60}
+  .center-page{text-align:center;padding:52px 48px 40px}
 </style>
 </head>
-<body data-page-node-id="I4nPeGKOueoimCsOrAVEtm">
-<header data-page-node-id="6cpTrrSpD1BCA2U4eigiJx">
-  <h1 data-page-node-id="caAq1jjEOuRySwuXmkf5pI">ESG 披露核查 Agent</h1>
-  <nav data-page-node-id="PNrGgTDvwfDsDB4jPqzfm6">
-    <button data-t="intro" class="active" data-page-node-id="CsNpVqgMFDDT1b5RtlwaRm">介绍</button>
-    <button data-t="results" data-page-node-id="mP7DbxMvv4SFdbACKWNimo">核查结果</button>
-    <button data-t="review" data-page-node-id="cBJmLLkuwyqoCsNvIG6O82">人工复核</button>
-    <button data-t="board" data-page-node-id="HqnW50wVo5AZkwXGfFGpMg">运营看板</button>
+<body data-page-node-id="6JNtv5VuFnUTTLF5vg5urq">
+<header data-page-node-id="oo7obLBvWOS4ICy9UDSgLZ">
+  <div class="logo" data-page-node-id="HfHNJcwGx9eR9AZoBWcJKp"><i data-page-node-id="MWO4HD271Hn7zy0Y9iAAsE"></i>ESG 披露核查 Agent</div>
+  <nav id="nav" data-page-node-id="7DJdN0f8TYRdJz81puwiaK">
+    <button data-t="intro" class="active" data-page-node-id="eWCDySYtoKYkzLD4M5oipe">介绍</button>
+    <button data-t="results" data-page-node-id="l64W0vq40FtJW8BaDbzEST">核查结果</button>
+    <button data-t="review" data-page-node-id="Awn47vLGYmPf6Fumwr4SvP">人工复核</button>
+    <button data-t="board" data-page-node-id="s92eXlSPxmY90l1ExVwYPw">运营看板</button>
   </nav>
-  <span id="user" data-page-node-id="ENxYCs41gKwPfmC3MocJAG"></span>
+  <div class="top-right" data-page-node-id="MCOWnSK8I4V42qCI0fDADV">
+    <button id="btn-guide" title="使用说明" data-page-node-id="XFYzNsoHCCLAyLgWo11Vf1">?</button>
+    <span id="user" data-page-node-id="fCf3Fbiix03qBwYPLrC3FT"></span>
+    <button id="btn-logout" class="hide" data-page-node-id="08STo3frwLCjCjKPsNSXDM">退出</button>
+  </div>
 </header>
-<main data-page-node-id="e6I0763e8dmBgcs5ENzt9B">
+<main data-page-node-id="ybEcq9r1wT6AtUxsBaynjd">
 
-<section id="t-intro" data-page-node-id="hV70X3wsH4u2BLvDSgOJBv">
-  <div class="card" data-page-node-id="JUXf0tf0fKMx255a4JA4RC">
-    <h2 data-page-node-id="8VnaAkqbeC9lofUpbEG8SC">这个工具是做什么的</h2>
-    <p data-page-node-id="g0XwtWGsucJjk1dhKo5cCS">输入 A 股上市公司的 ESG 报告（PDF），自动核查 10 条温室气体（GHG）披露项：<b data-page-node-id="7xqokzrhv2C7pZum6EpTml">披露了没有、口径是否规范、证据在第几页</b>。机器只做初筛，抽查与存疑条目必须人工复核后才能作为结论。</p>
-    <p style="margin-top:10px" class="muted" data-page-node-id="84zyZXs3X0W3YjYG3ix7ek">为什么是温室气体口径：2026 年是 A 股强制披露元年（430 家），监管方公开承认「统计口径不一、可比性待加强」——口径核查正是机器擅长、人工枯燥的活。</p>
-  </div>
-  <div class="card" data-page-node-id="Bm7iinn8fmNWlHmdWBWc0m">
-    <h2 data-page-node-id="0Goaqdx89ktg4lnI1JNV6g">结果怎么读（三色处置）</h2>
-    <table data-page-node-id="ZHH5edHD5u3NjtXjp1Mord">
-      <tr data-page-node-id="5yOH8F84arabAqPLoEG6Cr"><th data-page-node-id="VIwBx2IRxov0JLBe76PHet">标记</th><th data-page-node-id="6OEEYGpRsokDt1I1I906eW">含义</th><th data-page-node-id="GkCZQI4ozFdXWy0teWSLqX">你该做什么</th></tr>
-      <tr data-page-node-id="UiIMCjXBpvicMfd8fgFsIz"><td data-page-node-id="GWrGK3ScLAnyAAs6Mzirl6"><span class="pill p-high" data-page-node-id="zHAJCXlXaExqCHlAatBEiZ">自动放行</span></td><td data-page-node-id="DtcPJIOsGi48CyYRQbFQbX">机器高置信、依据完整</td><td data-page-node-id="j7s9rfSqI6IBXrMmHAVrhA">可直接采用，建议随机抽验</td></tr>
-      <tr data-page-node-id="XFxEWfdrALJItJGhiABEqD"><td data-page-node-id="Xm85zxC0LKJO8iQSZpnIIn"><span class="pill p-medium" data-page-node-id="bRmcPC7oE33t7kiB3e333r">抽查</span></td><td data-page-node-id="IRWxdtSwKQi1HXzOzAZAqX">机器有判断但历史错误率偏高</td><td data-page-node-id="Z7egnszbWsKgSztO1sa5Uw">进入抽查队列，建议核对页码原文</td></tr>
-      <tr data-page-node-id="dhPMwqfAQWgMqdIu4DNQAR"><td data-page-node-id="1e1U3bQtAc2mBsnOYBTD7D"><span class="pill p-low" data-page-node-id="6rnCwvW8vKngD2xhvEUu9Z">人工复核</span></td><td data-page-node-id="cvD2XYOCEAGgtAy5Movy1Y">机器无法可靠判定</td><td data-page-node-id="GpqYjOeGCnPxF2ZTAs7GGg">必须查看报告原件对应页</td></tr>
-    </table>
-    <p style="margin-top:10px" class="muted" data-page-node-id="7ADl2XqBmJZoy3GQBEBL4x">每条结论都附原文页码，可回溯验证。<b data-page-node-id="rEyvgfoglRGib88YHPicVA">机器结论不替代审计意见</b>——本工具不做「数据可不可信」的实质判断。</p>
-  </div>
-</section>
-
-<section id="t-results" class="hide" data-page-node-id="JmglBC00cUGSVFYZ8xhB6D">
-  <div class="card" data-page-node-id="xkKVphjFBPDjDaoz7FxAMx">
-    <h2 data-page-node-id="EheZoKNeCGCm20zesdlmvx">核查总表（示例批次：长安汽车 + 江淮汽车 2025 年度 ESG 报告）</h2>
-    <table id="res-table" data-page-node-id="Vj5QEBgEhkt4GqtJGC4zyV">
-      <tr data-page-node-id="vFWD64vfDcP0yd8JqJbQbk"><th data-page-node-id="vrFE6MEUvP0J7ClIzYXpzt">规则</th><th data-page-node-id="psos09yGsPZL5SNXeGFkGP">核查项</th><th data-page-node-id="a10GRDG5iSlAENbM8GVq4R">报告</th><th data-page-node-id="E6y2rKKRgBsYqJX7N7ZAfH">机器判定</th><th data-page-node-id="vwGFg6v9ra3EJmrktGrPmg">披露值</th><th data-page-node-id="mqH1bGb3hcRy3OYZrcE4BM">页码</th><th data-page-node-id="buO9v9ketbORx1SJgqJ0Bm">置信度</th><th data-page-node-id="yr1t968GSUgtcYf7qnh2Sn">处置</th><th data-page-node-id="PcmlrKWExWHiZlTdn8Wq08">最近复核</th></tr>
-    </table>
-    <p id="res-hint" class="muted" style="margin-top:8px" data-page-node-id="SgfSTpP083BxWXE3lvBkCp">复核请切到「人工复核」页签。</p>
-  </div>
-</section>
-
-<section id="t-review" class="hide" data-page-node-id="Y0gtBnEdiVIecPvsW49lgT">
-  <div class="card" data-page-node-id="ZiWrIw624tVKJ1LeRo1wNE">
-    <h2 data-page-node-id="BkpsnlYHL6OVH94kC4FG9M">复核工作台</h2>
-    <p class="muted" data-page-node-id="rtpDqsNqxmijCcmhmHbIEZ">选择一条「抽查/人工复核」条目，对照机器判定与页码证据给出结论。</p>
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin:12px 0" data-page-node-id="qBP5wVETXugIH29hBM3koL">
-      <select id="rv-sel" data-page-node-id="iALJ4fyfQZSmjEBzKOrniC"></select>
-      <button class="btn sec" onclick="loadDetail()" data-page-node-id="HulE6rgAJGwtWLmwxicliW">载入详情</button>
+<section id="t-intro" data-page-node-id="il7qRrx63dEJgsznxB8W0u">
+  <div class="card center-page" data-page-node-id="liBAXWsPpLko0EQdaa93Qg">
+    <div class="pill p-purple" style="margin-bottom:14px" data-page-node-id="D1URgxF30hEfmjhGbvRHwL">A 股 ESG 强制披露元年 · 430 家</div>
+    <h1 style="font-size:19px;font-weight:600;margin-bottom:10px;line-height:1.6" data-page-node-id="I2scivQOtBp4FsD9bzzOnO">上市公司温室气体披露：<span style="color:var(--blue)" data-page-node-id="XOAnN6aWbUSOTsxdn0wceL">机器初筛</span>，<span style="color:var(--purple)" data-page-node-id="LFqsij0ZKdjc2mYFVrQu7P">人工复核</span></h1>
+    <p class="muted" style="max-width:560px;margin:0 auto 22px" data-page-node-id="QQMTBpXTagvuOq8o45T3Hu">2026 年起 430 家 A 股公司强制披露 ESG 报告，GHG 数据口径不一、人工核查枯燥量大——这个工具让机器通读报告初筛 10 条披露项，人只复核机器没把握的少数条目。</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:30px" data-page-node-id="zhlkU23FWydzKGO5xPScBw">
+      <button class="btn" onclick="go('results')" data-page-node-id="GBDFPVbvDUYhGZBJ2UQhHM">查看示例批次 →</button>
+      <button class="btn sec" onclick="openGuide()" data-page-node-id="HeJ3BZRFCzkP3wWESP5snv">这个工具是干什么的？</button>
     </div>
-    <div class="card" id="rv-detail" style="display:none" data-page-node-id="yaVH1PQOhYYOsIg051uIzm"></div>
-    <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-top:12px" data-page-node-id="nZxr0l1bnYz1EkPrzDjCu0">
-      <select id="rv-verdict" data-page-node-id="sFuYFZRJ1AThU9GpQdV9u0">
-        <option value="" data-page-node-id="btA3jEJ9pJb88CCXOr5Gur">选择复核结论…</option>
-        <option data-page-node-id="isuMhBswvDUP0bYSqMdMHw">同意机器判定</option><option data-page-node-id="2iQD1z9nU1M3NpvJoBcqzX">需修改</option><option data-page-node-id="XPeZZA25UwA3XnoTPhB8WK">证据不足待定</option>
-      </select>
-      <input id="rv-comment" placeholder="复核备注（选填，需修改时请注明理由）" data-page-node-id="IJgGCWxA2a1UrbtKzJu5Ru">
+    <div style="display:flex;border-top:1px solid var(--line);padding-top:22px;max-width:640px;margin:0 auto" data-page-node-id="QdYuTRZKhdWFNHozOjhwcK">
+      <div style="flex:1;text-align:center" data-page-node-id="ILFFbqLpKTnR5U0yjJ0JwL">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--blue-2);margin:0 auto 8px" data-page-node-id="NYD9OvfIT8dj2x2UjoNvfU"></div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px" data-page-node-id="XMMvr9HKoZSpDylSnpQevr">机器核查</div>
+        <div class="hint" data-page-node-id="z8YsrF6AZXHY33Zvd5atad">检索 · 抽取 · 判定</div>
+      </div>
+      <div style="flex:1;text-align:center" data-page-node-id="d2qpGYmZc6w1Za123per7D">
+        <div style="width:8px;height:8px;border-radius:50%;background:#EF9F27;margin:0 auto 8px" data-page-node-id="vjLLmmTdFxw74zKqSiKf1R"></div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px" data-page-node-id="3AIsdFBBGeXFQpWNldPktu">置信度分流</div>
+        <div class="hint" data-page-node-id="NkAiPgFpckvPTvtZCCEqVm">放行 · 抽查 · 复核</div>
+      </div>
+      <div style="flex:1;text-align:center" data-page-node-id="eoT4f4BsrVDMU6QtkPchdG">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--purple-2);margin:0 auto 8px" data-page-node-id="dXls7jXFvGRAWpUdCzVmVG"></div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px" data-page-node-id="b7ywMB0UcfcQHzT6c0AG3F">人工复核</div>
+        <div class="hint" data-page-node-id="1LJiaQaYmJD3X1W5tmtKj9">对照原文 · 留痕</div>
+      </div>
     </div>
-    <button class="btn" style="margin-top:12px" onclick="submitReview()" data-page-node-id="S4eZMZSk2PJZoeMwWEFHdZ">提交复核结论</button>
-    <span id="rv-status" class="muted" style="margin-left:12px" data-page-node-id="6N1Y6bJhfzksu0AHWNMcMG"></span>
   </div>
 </section>
 
-<section id="t-board" class="hide" data-page-node-id="E55QWIwi7AEPsUcePcKwyy">
-  <div class="card" data-page-node-id="AlR4XIUooVTjz2BHVxFc5G">
-    <h2 data-page-node-id="kf9uN8auLlAYXqf2DgBefK">运营看板</h2>
-    <div class="grid" id="bd-stats" data-page-node-id="QJF6ypMm8428zHh8MFSpHN"></div>
+<section id="t-results" class="hide" data-page-node-id="mB9SodU1BwYP2Xxacck2iG">
+  <div class="card" data-page-node-id="lxlPm1rT5ADDzdU5nU8mo4">
+    <h2 data-page-node-id="gUGhezSPvv9W0BACjxXF3Y">核查总表 <span class="hint" style="font-weight:400" data-page-node-id="OHfGBaF8A7dZLSSwPqCmtk">示例批次：长安汽车 / 江淮汽车 2025 年度 ESG 报告 · 点击行展开详情</span></h2>
+    <div class="toolbar" data-page-node-id="JPFza9Jeu9FDMudVwFFOMq">
+      <select id="f-report" data-page-node-id="cxrWlbFkh4XDdIgpbLEKgH"><option value="" data-page-node-id="CM0aeGSzg3cIGcYUOtFwAl">全部报告</option><option data-page-node-id="FSNVV4csevVcT6EOuJTHVK">长安</option><option data-page-node-id="G6rqz5DRtuoRPwqkVVaR8o">江淮</option></select>
+      <select id="f-disp" data-page-node-id="lFeHyUboHvD4BDVgZEJz9D"><option value="" data-page-node-id="044A4FjEMqSZpr7FyEbpTx">全部处置</option><option data-page-node-id="gLBFXD3ucC5O49o8axWg5V">自动放行</option><option data-page-node-id="mZ6eOhZoRSTIzbSMoIA2yq">抽查</option><option data-page-node-id="KKjcaQSL6q5XOVA4oc0XUD">人工复核</option></select>
+      <select id="f-conf" data-page-node-id="RxwNLXBwFfeECOy1gBMsm8"><option value="" data-page-node-id="xGLOwAXSKu8DdZWHPE8E9m">全部置信度</option><option data-page-node-id="2ThKLBiNK2PWO3qTHJ7Tew">high</option><option data-page-node-id="iOmnAnIcpO5EMpzTpheAe0">medium</option><option data-page-node-id="JIXlEzGDoQc95j1TmVXq7F">low</option></select>
+      <input id="f-q" placeholder="搜索规则或核查项…" data-page-node-id="Pps7fxZNbsKU81SDwFMUV5">
+      <button class="btn sm" onclick="go('review')" data-page-node-id="K5gPv3Gq0hLBcdPki8Q34e">去复核</button>
+    </div>
+    <div class="chips" id="stat-chips" data-page-node-id="nBUVbamTBkOHSNVZp3XBz1"></div>
+    <table data-page-node-id="3PQXxShtnE2oUuIIJVE9Sp">
+      <thead data-page-node-id="gqtp4kVePFmTtSs8zv99gY"><tr data-page-node-id="WtL4gbWAZKck2Ezukv9ym9"><th data-page-node-id="aCujJBcNUtEcWyhJ7uZdv7">规则</th><th data-page-node-id="41EWb458UvpnaDFITDtKLq">核查项</th><th data-page-node-id="OlaLu8PdjQeALdFmm19o9r">报告</th><th data-page-node-id="pVzJkOq9kRMlgDaek4OeEK">机器判定</th><th data-page-node-id="bLayG7dacddDjdW2WUlBbC">披露值</th><th data-page-node-id="Pr6cmgGFVLfJdLxsAVjY70">页码</th><th data-page-node-id="SeIdKa7te2CTT5DC3nRiCo">置信度</th><th data-page-node-id="DPkdGMJLlMLixFqMJCh0Ct">处置</th><th data-page-node-id="cDC1EGDmexPkHqrS7Untx3">最近复核</th></tr></thead>
+      <tbody id="res-body" data-page-node-id="OLsUbKuJbunzMo0UqpeYzY"></tbody>
+    </table>
+    <p class="hint" style="margin-top:10px" data-page-node-id="pwOsXboFS6xImvO0oNSEj3">每条结论附原文页码，可回溯验证。机器结论不替代审计意见——本工具不做「数据可不可信」的实质判断。</p>
   </div>
-  <div class="card" data-page-node-id="IFAvK8YEiZKKGrfXCYD4CX">
-    <h2 data-page-node-id="dl5Ogl8hJ8DQFTESaqFc88">高错判规则 Top3（反哺规则库迭代）</h2>
-    <table id="bd-top" data-page-node-id="aKUCCR3AMPndbZd7mBbMCO"><tr data-page-node-id="XdAn5WZ8FNnLG876IFVcrA"><th data-page-node-id="FcFrU9UuDQ0MEJEnhB2tN4">规则</th><th data-page-node-id="g5TuQe8I0Y4JKFHeq3S8VQ">核查项</th><th data-page-node-id="BEOVsgPhVhAJXlyFKEbcjd">与人工基准不一致</th><th data-page-node-id="Y12u0ibdD8vUjMaNEOIlRL">总条数</th></tr></table>
-    <p class="muted" style="margin-top:8px" data-page-node-id="C4FWr8h4MgpJoNAvrH4jF9">修改率 = 「需修改」复核数 ÷ 总复核数。修改率高的规则进入规则库修订候选——这就是「使用 → 复核 → 迭代」闭环。</p>
+</section>
+
+<section id="t-review" class="hide" data-page-node-id="MDu1OYGZdCOVHwA1mxF2n5">
+  <div class="card" data-page-node-id="6kbEoZBHc7UQu8ZxBi0rGe">
+    <h2 data-page-node-id="ODfyYIx9KlWog55FwvQscG">复核工作台 <span class="hint" style="font-weight:400" data-page-node-id="gsVoAEVmh2eCckLKMwi1Z6">左侧选条目 → 对照证据原文 → 给出结论</span></h2>
+    <div class="split" data-page-node-id="ZaEVYgbFEmnlYuXELRA6Rq">
+      <div id="rv-queue" data-page-node-id="09mMGThfEeNE1XjrqQlrnY"></div>
+      <div id="rv-detail" data-page-node-id="dVN5DwWGV8QXDwKDOBsnsU"></div>
+    </div>
   </div>
-  <div class="card" data-page-node-id="8uJNIoZrhVMnJtY2GiQsqC">
-    <h2 data-page-node-id="L7XuPtbH34Uoiq64wuZEa7">处置分布</h2>
-    <table id="bd-conf" data-page-node-id="C6jY8KKmjlVxRd8SDXwXtz"><tr data-page-node-id="woYtNNJXIY1REknfqzc6iw"><th data-page-node-id="h3YbP1KJIZhClojEewF4Ti">置信度</th><th data-page-node-id="INpNdzSBgffZC9nHR5N1yA">处置</th><th data-page-node-id="IOr4woELd71rjdSgty14ZC">条数</th></tr></table>
+</section>
+
+<section id="t-board" class="hide" data-page-node-id="t42iUxBDEB6zRuXrwMorFh">
+  <div class="card" data-page-node-id="G50cPa4VCw3fuRvXYWCmLZ">
+    <h2 data-page-node-id="KJVIFkdwC4GIREerYPv9kH">运营看板 <span class="hint" style="font-weight:400" data-page-node-id="huEb9QwltV3GkEK6UxYfZz">使用数据 → 发现规则弱点 → 反哺规则库迭代</span></h2>
+    <div class="grid" id="bd-stats" data-page-node-id="CfWS4B8Z2YKSWxXk280s2Z"></div>
+  </div>
+  <div class="card" data-page-node-id="dPUGYnQggwex1qIhFsZLu7">
+    <h2 data-page-node-id="fOeInuaciMPbS5TFKlgByh">高错判规则 Top3 <span class="hint" style="font-weight:400" data-page-node-id="X6UnrA6EUgAmHWTYaAX8hO">与人工基准不一致次数 · 修改率高的规则进入修订候选</span></h2>
+    <div id="bd-top" data-page-node-id="K4A7m8OhI6VfIreGAsSU7r"></div>
+    <p class="hint" style="margin-top:10px" data-page-node-id="GX9lm8bhFCSMCCnw7BQYCX">这就是「使用 → 复核 → 迭代」闭环：看板不是报表，是规则库下一步改什么的输入。</p>
+  </div>
+  <div class="card" data-page-node-id="nNOOTaVHfmsvGcg5zC0pgf">
+    <h2 data-page-node-id="tQ9DxAOteOSilNn585kSo3">处置分布 <span class="hint" style="font-weight:400" data-page-node-id="5gtnc8aimVFjbxd2ALmDDC">机器把握程度的分布，决定人工工作量</span></h2>
+    <div id="bd-conf" data-page-node-id="n1axpIFkuBfHU16IPRA7HS"></div>
   </div>
 </section>
 
 </main>
+
+<div id="login-mask" class="mask hide" data-page-node-id="aSH3U4B77mDyJbmgpOFpuL">
+  <div class="modal" style="width:340px" data-page-node-id="BgsD1G4UFPYEXmCyHUB9A6">
+    <h3 style="margin-top:0" data-page-node-id="HwE9XB91V720OoZaXtdqtr">登录</h3>
+    <p style="margin-bottom:14px" data-page-node-id="LrTlSEVMFLUs5bmFrZHvcf">演示账号 demo / demo1234</p>
+    <input id="lg-u" placeholder="用户名" style="margin-bottom:8px" data-page-node-id="Tr2eo9VGfdfuHR6I0tOjm2">
+    <input id="lg-p" type="password" placeholder="密码" style="margin-bottom:14px" data-page-node-id="hd8QZAe9hTGTawxT0iuHCW">
+    <button class="btn" style="width:100%" onclick="doLogin()" data-page-node-id="4ZrimV5kjvX9XQvqh01qDA">登 录</button>
+    <p id="lg-err" class="hint" style="color:var(--red-tx);margin-top:10px" data-page-node-id="UTgKvGIPVwWFrjiei8cbLB"></p>
+  </div>
+</div>
+
+<div id="guide-mask" class="mask hide" onclick="if(event.target===this)closeGuide()" data-page-node-id="qjMFb63IcHLcrn7ovFu5qF">
+  <div class="modal" data-page-node-id="GIfFRVVA3QYaQe4aVRWTKj">
+    <div style="display:flex;align-items:center" data-page-node-id="aWxjJDsIAaqu7Fof0MA5Ug">
+      <span class="tag" id="gd-tag" data-page-node-id="DPhF5WfD751E9HMlbEAF7P">使用说明 · 1/3</span>
+      <button class="skip" style="margin-left:auto" onclick="closeGuide()" data-page-node-id="Ha6Phdql8a6LSSceNtLRAn">跳过</button>
+    </div>
+    <div id="gd-body" data-page-node-id="Ko6mb9THHB0BaXWZfLrz93"></div>
+    <div class="m-foot" data-page-node-id="bVa1CLBacQRJDATkNH3LAk">
+      <div class="dots" id="gd-dots" data-page-node-id="mF6rEMgREesW4Vw6NA4OKA"></div>
+      <button class="btn pv" style="margin-left:auto" id="gd-next" onclick="guideNext()" data-page-node-id="0QwoxHr9Hlcc2tnV8w7eiR">下一步</button>
+    </div>
+  </div>
+</div>
+
 <script>
 let RESULTS = [];
+let CUR = null, GD = 0;
 const $ = s => document.querySelector(s);
-// 导航
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.remove("active"));
-  b.classList.add("active");
+const shortRep = r => (r||"").replace(/(汽车|股份|有限|公司|2025|年度|ESG|报告)/g,"") || r;
+
+/* ---------- 导航 ---------- */
+document.querySelectorAll("#nav button").forEach(b => b.onclick = () => go(b.dataset.t));
+function go(t){
+  document.querySelectorAll("#nav button").forEach(x => x.classList.toggle("active", x.dataset.t===t));
   document.querySelectorAll("main section").forEach(s => s.classList.add("hide"));
-  $("#t-" + b.dataset.t).classList.remove("hide");
-  if (b.dataset.t === "results") loadResults();
-  if (b.dataset.t === "review") loadQueue();
-  if (b.dataset.t === "board") loadBoard();
-});
-// 登录（未登录时弹出）
+  $("#t-"+t).classList.remove("hide");
+  if(t==="results") loadResults();
+  if(t==="review") loadReview();
+  if(t==="board") loadBoard();
+}
+
+/* ---------- 登录 ---------- */
 (async function boot(){
   const r = await fetch("/api/results");
-  if (r.status === 401) { promptLogin(); return; }
-  const d = await r.json(); afterLogin(d);
+  if(r.status===401){ $("#login-mask").classList.remove("hide"); return; }
+  const d = await r.json(); RESULTS = d.results; afterLogin();
 })();
-function promptLogin(){
-  const u = prompt("演示账号 demo / demo1234\n请输入用户名："); if (u===null) return;
-  const p = prompt("密码："); if (p===null) return;
-  fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({username:u,password:p})}).then(r=>{
-    if(!r.ok){ alert("登录失败，重试"); return promptLogin(); }
-    loadResults();
-  });
+async function doLogin(){
+  const r = await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({username:$("#lg-u").value,password:$("#lg-p").value})});
+  if(!r.ok){ $("#lg-err").textContent = "用户名或密码错误"; return; }
+  $("#login-mask").classList.add("hide");
+  const d = await (await fetch("/api/results")).json(); RESULTS = d.results;
+  afterLogin();
 }
 function afterLogin(){
   $("#user").textContent = "已登录";
-  loadResults();
+  $("#btn-logout").classList.remove("hide");
+  if(!localStorage.getItem("esg_guide_seen")) openGuide();
 }
+$("#btn-logout").onclick = async ()=>{
+  await fetch("/api/logout",{method:"POST"});
+  RESULTS = []; location.reload();
+};
+$("#btn-guide").onclick = openGuide;
+
+/* ---------- 引导弹窗 ---------- */
+const GUIDE = [
+  {tag:"这个工具是干什么的 · 1/3", h:"先说背景：ESG 报告是什么",
+   body:`<p>2026 年起，A 股 430 家上市公司被强制披露 ESG（环境、社会、治理）报告。其中温室气体（GHG）排放是核心章节，但各家统计口径不一、可比性差——监管方公开承认这一点。</p>
+   <p style="margin-top:8px"><b style="color:var(--ink);font-weight:600">它解决什么问题：</b>人工通读上百页报告核查 10 条 GHG 披露项，又慢又枯燥。这个工具让机器通读报告、逐条给出「披露了没有 / 口径规范吗 / 证据第几页」，人只复核机器没把握的少数条目。</p>`},
+  {tag:"怎么读结果 · 2/3", h:"三色标记 = 机器的把握程度",
+   body:`<p style="margin-bottom:10px">
+   <span class="pill p-high">蓝 · 自动放行</span>&nbsp;机器高置信，可直接采用<br><br>
+   <span class="pill p-medium">黄 · 抽查</span>&nbsp;建议核对页码原文<br><br>
+   <span class="pill p-low">红 · 人工复核</span>&nbsp;必须查看报告原件</p>
+   <p>每条结论附原文页码和证据摘录，可回溯验证。机器结论不替代审计意见——本工具不做「数据可不可信」的实质判断。</p>`},
+  {tag:"你要做什么 · 3/3", h:"复核全程留痕，数据反哺迭代",
+   body:`<p>打开「人工复核」：左侧队列选一条 → 对照机器给出的证据原文和页码 → 点击结论提交，全程留痕。</p>
+   <p style="margin-top:8px">「运营看板」展示复核数据如何定位规则弱点、反哺规则库迭代——这就是本产品的闭环。</p>`}
+];
+function openGuide(){ GD=0; $("#guide-mask").classList.remove("hide"); renderGuide(); }
+function closeGuide(){ $("#guide-mask").classList.add("hide"); localStorage.setItem("esg_guide_seen","1"); }
+function guideNext(){ if(GD>=2){closeGuide();return;} GD++; renderGuide(); }
+function renderGuide(){
+  const g = GUIDE[GD];
+  $("#gd-tag").textContent = g.tag;
+  $("#gd-body").innerHTML = `<h3>${g.h}</h3>${g.body}`;
+  $("#gd-dots").innerHTML = GUIDE.map((_,i)=>`<i class="${i===GD?'on':''}"></i>`).join("");
+  $("#gd-next").textContent = GD===2 ? "开始使用" : "下一步";
+}
+
+/* ---------- 核查结果 ---------- */
 async function loadResults(){
   const d = await (await fetch("/api/results")).json();
-  RESULTS = d.results;
-  const tb = $("#res-table");
-  tb.querySelectorAll("tr:not(:first-child)").forEach(x=>x.remove());
-  const pill = c => `<span class="pill p-${c==='high'?'high':c==='medium'?'medium':'low'}">${c}</span>`;
-  const disp = c => `<span class="pill ${c==='自动放行'?'p-high':'p-purple'}">${c}</span>`;
-  for (const r of RESULTS){
+  RESULTS = d.results; renderResults();
+}
+function renderResults(){
+  const fr=$("#f-report").value, fd=$("#f-disp").value, fc=$("#f-conf").value, q=$("#f-q").value.trim();
+  const rows = RESULTS.filter(r=>
+    (!fr || shortRep(r.report).includes(fr)) && (!fd || r.disposition===fd) &&
+    (!fc || r.confidence===fc) && (!q || (r.rule_id+r.rule_name).includes(q)));
+  const n = k => RESULTS.filter(r=>r.disposition===k).length;
+  $("#stat-chips").innerHTML =
+    `<span>共 ${RESULTS.length} 条</span><span style="background:var(--blue-bg);color:var(--blue)">自动放行 ${n("自动放行")}</span>`+
+    `<span style="background:var(--amber-bg);color:var(--amber-tx)">抽查 ${n("抽查")}</span>`+
+    `<span style="background:var(--red-bg);color:var(--red-tx)">人工复核 ${n("人工复核")}</span>`;
+  const pill = c => `<span class="pill p-${c}">${c}</span>`;
+  const disp = c => `<span class="pill ${c==="自动放行"?"p-high":"p-purple"}">${c}</span>`;
+  const tb = $("#res-body"); tb.innerHTML = "";
+  for(const r of rows){
     tb.insertAdjacentHTML("beforeend",
-      `<tr><td>${r.rule_id}</td><td>${r.rule_name.slice(0,18)}</td><td>${r.report}</td>
-       <td>${r.judgment}</td><td>${r.value||"—"} ${r.unit||""}</td><td>${r.page||"—"}</td>
-       <td>${pill(r.confidence)}</td><td>${disp(r.disposition)}</td><td>${r.last_review||"未复核"}</td></tr>`);
+      `<tr class="rowlink" onclick="toggleDetail(${r.id})">
+        <td><b style="font-weight:600">${r.rule_id}</b></td><td>${r.rule_name}</td><td>${shortRep(r.report)}</td>
+        <td>${r.judgment}</td><td>${r.value?r.value+" "+(r.unit||""):"—"}</td><td>${r.page?"p"+r.page:"—"}</td>
+        <td>${pill(r.confidence)}</td><td>${disp(r.disposition)}</td><td>${r.last_review||"<span class='hint'>未复核</span>"}</td></tr>`);
+    tb.insertAdjacentHTML("beforeend",
+      `<tr class="detail-cell hide" id="d-${r.id}"><td colspan="9">
+        <b style="font-weight:600">机器理由</b>　${r.reason||"—"}
+        ${r.evidence?`<div class="evi"><b>证据 · 报告 p${r.page||"?"} 原文摘录</b>${r.evidence}</div>`:""}
+        <span class="hint">置信度 ${r.confidence} · 处置 ${r.disposition}${r.last_review?" · 最近复核："+r.last_review:""}${r.disposition!=="自动放行"?` · <a href="javascript:void(0)" onclick="goReview(${r.id})" style="color:var(--purple)">去复核 →</a>`:""}</span>
+      </td></tr>`);
+  }
+  if(!rows.length) tb.innerHTML = `<tr><td colspan="9" class="muted">没有符合条件的条目</td></tr>`;
+}
+["f-report","f-disp","f-conf"].forEach(id=>$("#"+id).onchange=renderResults);
+$("#f-q").oninput = renderResults;
+function toggleDetail(id){ $("#d-"+id).classList.toggle("hide"); }
+function goReview(id){ go("review"); setTimeout(()=>selectQueue(id), 80); }
+
+/* ---------- 人工复核 ---------- */
+async function loadReview(){
+  if(!RESULTS.length){
+    const d = await (await fetch("/api/results")).json(); RESULTS = d.results;
+  }
+  renderQueue();
+}
+function renderQueue(){
+  const q = RESULTS.filter(r=>r.disposition!=="自动放行");
+  const box = $("#rv-queue");
+  box.innerHTML = `<div class="hint" style="margin-bottom:8px">待复核队列 · ${q.length} 条</div>` +
+    (q.map(r=>`<div class="queue-item ${r.last_review?"done":""}" id="q-${r.id}" onclick="selectQueue(${r.id})">
+      <b style="font-weight:600">${r.rule_id} · ${shortRep(r.report)}</b>　<span class="pill ${r.confidence==="high"?"p-high":r.confidence==="medium"?"p-medium":"p-low"}">${r.disposition}</span><br>
+      机器=${r.judgment}（${r.confidence}）${r.last_review?` · <span style="color:var(--purple)">${r.last_review}</span>`:""}</div>`).join("") ||
+    `<div class="muted">队列为空：全部条目已自动放行。</div>`);
+  if(q.length) selectQueue(q.find(r=>!r.last_review)?.id ?? q[0].id);
+}
+function selectQueue(id){
+  const r = RESULTS.find(x=>x.id===id); if(!r) return;
+  CUR = r;
+  document.querySelectorAll(".queue-item").forEach(x=>x.classList.toggle("sel", x.id==="q-"+id));
+  $("#rv-detail").innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <b style="font-weight:600;font-size:14px">${r.rule_id} ${r.rule_name} · ${shortRep(r.report)}</b>
+      <span class="pill p-medium">${r.disposition}</span>
+    </div>
+    <div class="muted" style="margin-bottom:4px">机器判定：<b style="color:var(--ink)">${r.judgment}</b>（置信度 ${r.confidence}）　披露值：${r.value?r.value+" "+(r.unit||""):"—"}</div>
+    ${r.evidence?`<div class="evi"><b>证据 · 报告 p${r.page||"?"} 原文摘录</b>${r.evidence}</div>`:`<div class="evi" style="border-left-color:#d3d1c7"><b style="color:var(--hint)">证据</b>无摘录，请对照报告原件第 ${r.page||"—"} 页</div>`}
+    <div class="muted"><b style="color:var(--ink);font-weight:600">机器理由</b>　${r.reason||"—"}</div>
+    <div class="verdicts">
+      <button class="btn sm sec" onclick="submitReview('同意机器判定')">同意机器判定</button>
+      <button class="btn sm pv" onclick="submitReview('需修改')">需修改</button>
+      <button class="btn sm sec" onclick="submitReview('证据不足待定')">证据不足待定</button>
+    </div>
+    <input id="rv-comment" placeholder="复核备注（选填，需修改时请注明理由）" style="margin-top:10px">`;
+}
+async function submitReview(verdict){
+  if(!CUR) return;
+  const r = await fetch("/api/review",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({run_id:CUR.id,verdict,comment:$("#rv-comment").value})});
+  toast(r.ok ? `已提交：${verdict}` : "提交失败（"+r.status+"）");
+  if(r.ok){
+    const d = await (await fetch("/api/results")).json(); RESULTS = d.results;
+    const next = RESULTS.filter(x=>x.disposition!=="自动放行").find(x=>!x.last_review);
+    renderQueue(); if(next) selectQueue(next.id);
   }
 }
-function loadQueue(){
-  const sel = $("#rv-sel"); sel.innerHTML = "";
-  RESULTS.filter(r=>r.disposition!=="自动放行").forEach(r=>{
-    sel.insertAdjacentHTML("beforeend",
-      `<option value="${r.id}">${r.rule_id} | ${r.report} | 机器=${r.judgment}(${r.confidence})</option>`);
-  });
-  loadDetail();
+function toast(msg){
+  const t = document.createElement("div"); t.className="toast"; t.textContent=msg;
+  document.body.appendChild(t); setTimeout(()=>t.remove(), 2200);
 }
-function loadDetail(){
-  const id = +$("#rv-sel").value; const r = RESULTS.find(x=>x.id===id); if(!r) return;
-  $("#rv-detail").style.display="block";
-  $("#rv-detail").innerHTML = `
-    <b>${r.rule_id} ${r.rule_name}</b><br><br>
-    机器判定：<b>${r.judgment}</b>（置信度 ${r.confidence}，处置：${r.disposition}）<br>
-    披露值：${r.value||"—"} ${r.unit||""}　证据页：${r.evidence? "p"+r.page : r.page||"—"}<br>
-    机器理由：${r.reason||"—"}<br>
-    <span class="muted">请对照报告原文第 ${r.page||"—"} 页核对后给出结论。</span>`;
-}
-async function submitReview(){
-  const run_id = +$("#rv-sel").value, verdict = $("#rv-verdict").value;
-  if(!verdict){ $("#rv-status").textContent = "请先选择复核结论"; return; }
-  const r = await fetch("/api/review",{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({run_id,verdict,comment:$("#rv-comment").value})});
-  $("#rv-status").textContent = r.ok ? "已保存" : "保存失败（"+r.status+"）";
-  if(r.ok){ const d = await (await fetch("/api/results")).json(); RESULTS = d.results; }
-}
+
+/* ---------- 运营看板 ---------- */
 async function loadBoard(){
   const d = await (await fetch("/api/board")).json();
   $("#bd-stats").innerHTML = [
-    ["核查条目", d.event_count, "累计使用事件"], ["人工复核", d.review_count, "条"],
-    ["修改率", d.modify_rate, "需修改/总复核"], ["待定", d.pending_count, "证据不足待定"]
-  ].map(x=>`<div class="stat"><b>${x[1]}</b><span>${x[0]} · ${x[2]}</span></div>`).join("");
-  const tt = $("#bd-top"); tt.querySelectorAll("tr:not(:first-child)").forEach(x=>x.remove());
-  d.top_mismatch.forEach(r=>tt.insertAdjacentHTML("beforeend",
-    `<tr><td>${r.rule_id}</td><td>${r.rule_name.slice(0,22)}</td><td>${r.mismatch}</td><td>${r.total}</td></tr>`));
-  if(!d.top_mismatch.length) tt.insertAdjacentHTML("beforeend","<tr><td colspan=4 class=muted>暂无</td></tr>");
-  const tc = $("#bd-conf"); tc.querySelectorAll("tr:not(:first-child)").forEach(x=>x.remove());
-  d.conf_dist.forEach(r=>tc.insertAdjacentHTML("beforeend",
-    `<tr><td>${r.confidence}</td><td>${r.disposition}</td><td>${r.n}</td></tr>`));
+    ["核查条目", d.event_count, "累计使用事件", ""],
+    ["人工复核", d.review_count, "条", ""],
+    ["修改率", d.modify_rate, "需修改/总复核", "pv"],
+    ["待定", d.pending_count, "证据不足待定", "pv"]
+  ].map(x=>`<div class="stat ${x[3]}"><b>${x[1]}</b><span>${x[0]} · ${x[2]}</span></div>`).join("");
+  const maxM = Math.max(1, ...d.top_mismatch.map(r=>r.mismatch));
+  $("#bd-top").innerHTML = d.top_mismatch.map(r=>
+    `<div class="bar-row"><span><b style="font-weight:600">${r.rule_id}</b> ${r.rule_name.slice(0,12)}</span>
+     <div class="bar"><i class="p" style="width:${Math.round(r.mismatch/maxM*100)}%"></i></div>
+     <span class="muted">${r.mismatch}/${r.total}</span></div>`).join("") || `<p class="muted">暂无错判数据</p>`;
+  const maxN = Math.max(1, ...d.conf_dist.map(r=>r.n));
+  const cls = c => c==="high"?"b":c==="medium"?"a":"p";
+  $("#bd-conf").innerHTML = d.conf_dist.map(r=>
+    `<div class="bar-row"><span>${r.confidence} · ${r.disposition}</span>
+     <div class="bar"><i class="${cls(r.confidence)}" style="width:${Math.round(r.n/maxN*100)}%"></i></div>
+     <span class="muted">${r.n}</span></div>`).join("") || `<p class="muted">暂无</p>`;
 }
 </script>
 </body>
