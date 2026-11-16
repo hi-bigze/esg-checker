@@ -17,3 +17,11 @@ list_*.json
 data/app.db
 logs/
 启动复核台.bat
+
+# 内部文档与年报原文片段（只留本地，不进对外仓库）
+docs/*任务单*.md
+docs/翻车记录.md
+day1_setup.sh
+smoke_test.py
+data/annotation/*.txt
+data/annotation/*.png
