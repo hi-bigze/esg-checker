@@ -73,6 +73,7 @@
   .bar i{display:block;height:100%;border-radius:7px}
   .bar i.b{background:var(--blue-2)} .bar i.p{background:var(--purple-2)} .bar i.a{background:#EF9F27}
   .mask{position:fixed;inset:0;background:rgba(28,36,48,.4);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .mask.hide{display:none}
   .modal{background:var(--card);border-radius:var(--r2);width:420px;max-width:100%;padding:24px 28px;box-shadow:0 10px 30px rgba(28,36,48,.2)}
   .modal .tag{font-size:12px;color:var(--purple);background:var(--purple-bg);border-radius:10px;padding:2px 12px}
   .modal h3{font-size:15px;font-weight:600;margin:14px 0 8px}
@@ -234,16 +235,19 @@ function applyView(){
 
 /* ---------- 引导弹窗 ---------- */
 const GUIDE = [
-  {tag:"这个工具是干什么的 · 1/3",h:"先说痛点",
+  {tag:"使用说明",h:"使用说明",cover:true,
+   body:`<p style="text-align:center;color:var(--muted);margin-top:6px">30 秒看懂：这是什么、怎么读结果、怎么复核。</p>
+   <p style="text-align:center;margin-top:10px;color:var(--purple)">点「开始阅读」往下看，或点右上「跳过」直接进入核查结果。</p>`},
+  {tag:"这是什么 · 2/4",h:"先说痛点",
    body:`<p>一份 ESG 报告动辄上百页，温室气体（GHG）披露散落在表格、脚注和附注里，各家口径还不统一——人工逐条核查 10 项披露要求，费时、易漏、难对比。</p>
    <p style="margin-top:8px"><b style="color:var(--ink);font-weight:600">这个工具解决它：</b>机器通读报告，逐条给出「披露了没有 / 口径规范吗 / 证据第几页」，与人工基准一致率 90%；机器没把握的才交给人复核。</p>`},
-  {tag:"怎么读结果 · 2/3",h:"三色标记 = 机器的把握程度",
+  {tag:"怎么读结果 · 3/4",h:"三色标记 = 机器的把握程度",
    body:`<p style="margin-bottom:10px">
    <span class="pill p-high">蓝 · 自动放行</span>&nbsp;机器高置信，可直接采用<br><br>
    <span class="pill p-medium">黄 · 抽查</span>&nbsp;建议核对页码原文<br><br>
    <span class="pill p-low">红 · 人工复核</span>&nbsp;必须查看报告原件</p>
    <p>每条结论附原文页码和证据摘录，可回溯验证。机器结论不替代审计意见。</p>`},
-  {tag:"开始使用 · 3/3",h:"点「开始使用」直接进入核查结果",
+  {tag:"开始使用 · 4/4",h:"点「开始使用」直接进入核查结果",
    body:`<p>① 在「核查结果」点任意行，展开机器理由和证据原文；</p>
    <p style="margin-top:6px">② 切到「人工复核」，对照证据看结论——本页是静态演示，按钮不会真正提交。</p>
    <p style="margin-top:8px">这是本机一次真实评测的静态结果，无真实用户、无账号体系。</p>`}
@@ -253,13 +257,15 @@ function closeGuide(jump){
   $("#guide-mask").classList.add("hide");
   if(jump) location.hash = "#/results";
 }
-function guideNext(){ if(GD>=2){ closeGuide(true); return; } GD++; renderGuide(); }
+function guideNext(){ if(GD>=GUIDE.length-1){ closeGuide(true); return; } GD++; renderGuide(); }
 function renderGuide(){
   const g = GUIDE[GD];
   $("#gd-tag").textContent = g.tag;
-  $("#gd-body").innerHTML = `<h3>${g.h}</h3>${g.body}`;
+  $("#gd-body").innerHTML = g.cover
+    ? `<h3 style="font-size:22px;text-align:center;margin:18px 0 4px;color:var(--blue)">${g.h}</h3>${g.body}`
+    : `<h3>${g.h}</h3>${g.body}`;
   $("#gd-dots").innerHTML = GUIDE.map((_,i)=>`<i class="${i===GD?'on':''}"></i>`).join("");
-  $("#gd-next").textContent = GD===2 ? "开始使用 →" : "下一步";
+  $("#gd-next").textContent = GD===0 ? "开始阅读 →" : (GD===GUIDE.length-1 ? "开始使用 →" : "下一步");
 }
 $("#btn-guide").onclick = openGuide;
 
