@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>ESG 披露核查 Agent · 评测结果展示</title>
+<style>
+  :root{
+    --blue:#185FA5; --blue-2:#378ADD; --blue-bd:#B5D4F4; --blue-bg:#E6F1FB;
+    --purple:#534AB7; --purple-2:#7F77DD; --purple-bg:#EEEDFE;
+    --amber-bg:#FAEEDA; --amber-tx:#854F0B; --red-bg:#FCEBEB; --red-tx:#A32D2D;
+    --ink:#1c2430; --muted:#68758a; --hint:#98a3b5;
+    --bg:#f6f8fb; --card:#ffffff; --line:#e5eaf2; --soft:#f2f5fa;
+    --r:8px; --r2:12px; --shadow:0 1px 3px rgba(28,36,48,.06);
+  }
+  *{box-sizing:border-box;margin:0}
+  body{font-family:"Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+  header{background:var(--card);border-bottom:1px solid var(--line);padding:10px 24px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:10;flex-wrap:wrap}
+  .logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--blue)}
+  .logo i{width:18px;height:18px;border-radius:5px;background:var(--blue);display:inline-block}
+  nav{display:flex;gap:2px;margin-left:8px;flex-wrap:wrap}
+  nav button{border:none;background:none;padding:7px 14px;font-size:13px;color:var(--muted);cursor:pointer;border-radius:var(--r)}
+  nav button:hover{background:var(--soft)}
+  nav button.active{background:var(--blue);color:#fff}
+  .top-right{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+  .role-tag{font-size:11px;border-radius:10px;padding:3px 10px;background:var(--purple-bg);color:var(--purple)}
+  .top-right button{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:5px 12px;font-size:12px;color:var(--muted);cursor:pointer}
+  .top-right button:hover{border-color:var(--blue-bd);color:var(--blue)}
+  .notice{background:var(--amber-bg);color:var(--amber-tx);font-size:12px;padding:7px 24px;text-align:center;line-height:1.6}
+  main{max-width:1080px;margin:24px auto;padding:0 20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:22px 24px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .method-fold{padding:0 24px;}
+  .method-fold>summary{cursor:pointer;padding:18px 0;font-size:14px;font-weight:600;color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px;min-height:44px}
+  .method-fold>summary::-webkit-details-marker{display:none}
+  .method-fold>summary::before{content:"▸";color:var(--purple);font-size:13px;transition:transform .15s}
+  .method-fold[open]>summary::before{transform:rotate(90deg)}
+  .method-fold>summary .hint{font-weight:400;font-size:12px}
+  h2{font-size:15px;font-weight:600;margin-bottom:12px}
+  h3{font-size:13px;font-weight:600;margin:14px 0 4px}
+  .pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:12px;line-height:1.7}
+  .p-high{background:var(--blue-bg);color:var(--blue)} .p-medium{background:var(--amber-bg);color:var(--amber-tx)}
+  .p-low{background:var(--red-bg);color:var(--red-tx)} .p-purple{background:var(--purple-bg);color:var(--purple)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--soft);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;white-space:nowrap}
+  tbody tr.rowlink{cursor:pointer}
+  tbody tr.rowlink:hover{background:var(--soft)}
+  input,select,textarea{border:1px solid #d8e0ec;border-radius:var(--r);padding:8px 10px;font-size:13px;width:100%;background:var(--card);color:var(--ink)}
+  input:focus,select:focus{outline:none;border-color:var(--blue-2);box-shadow:0 0 0 3px rgba(55,138,221,.12)}
+  .btn{background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;cursor:pointer;font-size:13px}
+  .btn:hover{background:#14508d}
+  .btn.sec{background:var(--card);color:var(--blue);border:1px solid var(--blue-bd)}
+  .btn.pv{background:var(--purple)} .btn.pv:hover{background:#443c99}
+  .btn.sm{padding:6px 12px;font-size:12px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{background:var(--soft);border-radius:var(--r);padding:14px 16px}
+  .stat b{font-size:22px;font-weight:600;color:var(--blue);display:block}
+  .stat.pv b{color:var(--purple)}
+  .stat span{font-size:12px;color:var(--muted)}
+  .hide{display:none}
+  .muted{color:var(--muted);font-size:13px}
+  .hint{color:var(--hint);font-size:12px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .chips span{font-size:12px;border-radius:10px;padding:4px 12px;background:var(--soft);color:var(--muted)}
+  .toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  .toolbar select{width:120px}
+  .toolbar input{flex:1;min-width:150px}
+  .detail-cell td{background:var(--soft);padding:14px 16px}
+  .evi{background:var(--card);border:1px solid var(--purple-bg);border-left:3px solid var(--purple);border-radius:var(--r);padding:10px 14px;font-size:13px;line-height:1.7;margin:8px 0}
+  .evi b{color:var(--purple);font-weight:600;font-size:12px;display:block;margin-bottom:2px}
+  .split{display:grid;grid-template-columns:1fr 1.8fr;gap:14px;align-items:start}
+  .queue-item{border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:12px;cursor:pointer;margin-bottom:8px;line-height:1.6}
+  .queue-item:hover{border-color:var(--blue-bd)}
+  .queue-item.sel{border:2px solid var(--purple);background:var(--purple-bg)}
+  .verdicts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .bar-row{display:grid;grid-template-columns:170px 1fr 46px;gap:10px;align-items:center;font-size:12px;margin:8px 0}
+  .bar{height:14px;border-radius:7px;background:var(--soft);overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:7px}
+  .bar i.b{background:var(--blue-2)} .bar i.p{background:var(--purple-2)} .bar i.a{background:#EF9F27}
+  .mask{position:fixed;inset:0;background:rgba(28,36,48,.4);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .mask.hide{display:none}
+  .modal{background:var(--card);border-radius:var(--r2);width:420px;max-width:100%;padding:24px 28px;box-shadow:0 10px 30px rgba(28,36,48,.2)}
+  .modal .tag{font-size:12px;color:var(--purple);background:var(--purple-bg);border-radius:10px;padding:2px 12px}
+  .modal h3{font-size:15px;font-weight:600;margin:14px 0 8px}
+  .modal p{font-size:13px;color:var(--muted);line-height:1.8}
+  .dots{display:flex;gap:6px}
+  .dots i{width:6px;height:6px;border-radius:50%;background:#d3d1c7}
+  .dots i.on{background:var(--purple)}
+  .m-foot{display:flex;align-items:center;margin-top:18px}
+  .skip{font-size:12px;color:var(--hint);cursor:pointer;background:none;border:none}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;border-radius:var(--r);padding:10px 20px;z-index:60}
+  .src{font-size:12px;color:var(--muted);line-height:1.9}
+  .src code{background:var(--soft);border-radius:4px;padding:1px 5px;font-size:11px;color:var(--purple)}
+  .src ul{margin:6px 0 0 18px}
+  @media(max-width:760px){.split{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}main{padding:0 12px}header{padding:10px 12px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><i></i>ESG 披露核查 Agent</div>
+  <nav id="nav"></nav>
+  <div class="top-right">
+    <button id="btn-guide" title="使用说明">?</button>
+    <span class="role-tag">20 条实测 · 可复现</span>
+  </div>
+</header>
+<main>
+
+<section id="t-intro">
+  <div class="card" style="padding:34px 40px 30px">
+    <div class="pill p-purple" style="margin-bottom:16px">实测样本：长安汽车 / 江淮汽车 2025 年度 ESG 报告（合计 242 页）</div>
+    <h1 style="font-size:19px;font-weight:600;margin-bottom:14px;line-height:1.6">一份上百页的 ESG 报告，人工核查温室气体披露要翻一整天</h1>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+      <div style="background:var(--soft);border-radius:var(--r2);padding:16px 18px">
+        <div style="font-size:12px;font-weight:600;color:var(--red-tx);margin-bottom:6px">痛点</div>
+        <p style="font-size:13px;line-height:1.8">2026 年起 430 家 A 股公司强制披露 ESG 报告。温室气体（GHG）数据散落在表格、脚注和附注里，各家口径还不统一——人工逐条核查 <b style="font-weight:600">10 项披露要求</b>，费时、易漏、难对比。</p>
+      </div>
+      <div style="background:var(--soft);border-radius:var(--r2);padding:16px 18px">
+        <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px">这个工具做什么</div>
+        <p style="font-size:13px;line-height:1.8">机器通读报告，逐条给出：<b style="font-weight:600">披露了没有、口径规范吗、证据在第几页</b>。实测与人工基准一致率 <b style="font-weight:600">90%</b>（20 条）；机器没把握的才交给人——本批次 20 条里，<b style="font-weight:600">14 条自动放行、6 条建议抽查、0 条强制人工复核</b>。</p>
+      </div>
+    </div>
+    <div style="background:var(--purple-bg);border-radius:var(--r2);padding:12px 18px;margin-bottom:18px;font-size:13px;line-height:1.7"><b style="font-weight:600;color:var(--purple)">怎么用（两步）：</b>① 打开「核查结果」，点任意行看机器理由和证据原文 ② 切到「人工复核」，看一条复核样例如何对照证据给出结论</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" onclick="location.hash='#/results'">查看核查结果 →</button>
+      <button class="btn sec" onclick="openGuide()">详细说明</button>
+    </div>
+  </div>
+
+  <details class="card method-fold">
+    <summary>评测方法与复现 <span class="hint">—— 20 条判定均来自一次可复现的本机评测，点开看数字出处</span></summary>
+    <div class="src" style="margin-top:12px">
+      <ul>
+        <li><b>判定一致率 18/20 = 90%</b>——20 条判定中 18 条与人工基准一致，剩 2 条为机器真错判，已逐条归因。</li>
+        <li><b>检索 recall@5：53% → 76%</b>——纯向量检索加同义词桥接 + BM25 混合后的实测提升。</li>
+        <li><b>证据页召回 17/17 = 100%</b>——每条判定的证据页都命中人工标注页码，可回溯报告原文核对。</li>
+        <li><b>置信度分层：high 14 条 0 错判、medium 6 条 2 错判</b>——错判集中在中置信度，据此设计「高置信自动放行、中置信度抽查」的分流。</li>
+        <li><b>评测脚本</b>：<code>scripts/day3_retrieval_eval.py</code>（召回）、<code>scripts/day4_full_eval.py</code>、<code>scripts/day5_triage_export.py</code>（判定与分流）；逐条结果落在 <code>data/eval/day5_results.json</code>，本页数字即从该文件提取。</li>
+        <li><b>Ground truth</b>：20 条人工标注（<code>data/annotation/ground_truth_v1.csv</code>，记录"指标在不在、第几页、原文引用"）。标注过程发现并修正了 AI 预判的 3 处错误——基准本身也被审计，不是模型自己给自己打分。</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<section id="t-results" class="hide">
+  <div class="card">
+    <h2>核查总表 <span class="hint" style="font-weight:400">点击行展开详情 · 机器结论不替代审计意见</span></h2>
+    <div class="toolbar">
+      <select id="f-report"><option value="">全部报告</option><option>长安</option><option>江淮</option></select>
+      <select id="f-disp"><option value="">全部处置</option><option>自动放行</option><option>抽查</option><option>人工复核</option></select>
+      <select id="f-conf"><option value="">全部置信度</option><option>high</option><option>medium</option><option>low</option></select>
+      <input id="f-q" placeholder="搜索规则或核查项…">
+      <button class="btn sm" onclick="location.hash='#/review'">去复核 →</button>
+    </div>
+    <div class="chips" id="stat-chips"></div>
+    <table>
+      <thead><tr><th>规则</th><th>核查项</th><th>报告</th><th>机器判定</th><th>披露值</th><th>页码</th><th>置信度</th><th>处置</th></tr></thead>
+      <tbody id="res-body"></tbody>
+    </table>
+    <p class="hint" style="margin-top:10px">每条结论附原文页码，可回溯验证。本工具不做「数据可不可信」的实质判断。</p>
+  </div>
+</section>
+
+<section id="t-review" class="hide">
+  <div class="card">
+    <h2>复核工作台 <span class="hint" style="font-weight:400">左侧选条目 → 对照证据原文 → 看复核结论</span></h2>
+    <div class="split">
+      <div id="rv-queue"></div>
+      <div id="rv-detail"></div>
+    </div>
+    <button class="btn sm sec" style="margin-top:14px" onclick="location.hash='#/results'">← 返回核查结果</button>
+  </div>
+</section>
+
+<section id="t-board" class="hide">
+  <div class="card">
+    <h2>评测看板 <span class="pill p-purple" style="font-weight:400">20 条实测 · 可复现</span></h2>
+    <div class="grid" id="bd-stats"></div>
+  </div>
+  <div class="card">
+    <h2>与人工基准不一致的条目 <span class="hint" style="font-weight:400">2 条真错判 · 聚合展示，反哺规则库修订</span></h2>
+    <div id="bd-top"></div>
+    <p class="hint" style="margin-top:10px">「使用 → 复核 → 迭代」闭环在设计里；本页只展示已实测的评测结论，不展示未发生的用户行为数据。</p>
+  </div>
+  <div class="card">
+    <h2>处置分布 <span class="hint" style="font-weight:400">机器把握程度的分布，决定人工工作量</span></h2>
+    <div id="bd-conf"></div>
+  </div>
+</section>
+
+</main>
+
+<div id="guide-mask" class="mask hide" onclick="if(event.target===this)closeGuide()">
+  <div class="modal">
+    <div style="display:flex;align-items:center">
+      <span class="tag" id="gd-tag">使用说明</span>
+      <button class="skip" style="margin-left:auto" onclick="closeGuide(true)">跳过</button>
+    </div>
+    <div id="gd-body"><h3 style="font-size:22px;text-align:center;margin:18px 0 4px;color:var(--blue)">使用说明</h3><p style="text-align:center;color:var(--muted);margin-top:6px">30 秒看懂：这是什么、怎么读结果、怎么复核。</p><p style="text-align:center;margin-top:10px;color:var(--purple)">点「开始阅读」往下看，或点右上「跳过」直接进入核查结果。</p></div>
+    <div class="m-foot">
+      <div class="dots" id="gd-dots"><i class="on"></i><i></i><i></i><i></i></div>
+      <button class="btn pv" style="margin-left:auto" id="gd-next" onclick="guideNext()">开始阅读 →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* 静态数据：由 data/eval/day5_results.json 生成，已剔除 gt/match 内部评测标签 */
+const DATA = [{"id":1,"rule_id":"GHG-01","rule_name":"范围一温室气体排放总量","report":"changan","judgment":"是","confidence":"high","disposition":"自动放行","value":"190,728","unit":"吨二氧化碳当量","page":29,"evidence":"范围一 单位 吨二氧化碳当量 2025年 190,728","reason":"报告按吨二氧化碳当量披露了2025年范围一温室气体排放绝对量190,728吨，且与范围二分列，符合要求。"},{"id":2,"rule_id":"GHG-01","rule_name":"范围一温室气体排放总量","report":"jianghuai","judgment":"是","confidence":"high","disposition":"自动放行","value":"75,558.81","unit":"吨二氧化碳当量","page":93,"evidence":"范围一 75,558.81 吨二氧化碳当量","reason":"报告在环境绩效表中单独披露了范围一温室气体排放绝对量75,558.81吨二氧化碳当量，单位规范，且与范围二拆分列示。"},{"id":3,"rule_id":"GHG-02","rule_name":"范围二排放量（基于位置）","report":"changan","judgment":"部分","confidence":"high","disposition":"自动放行","value":"752,014","unit":"吨二氧化碳当量","page":29,"evidence":"范围二 吨二氧化碳当量 2025年 752,014","reason":"报告披露了范围二排放总量数值，但未标注该数值为「基于位置」口径，缺口径标注，故为部分。"},{"id":4,"rule_id":"GHG-02","rule_name":"范围二排放量（基于位置）","report":"jianghuai","judgment":"是","confidence":"high","disposition":"自动放行","value":"182,178.63","unit":"吨二氧化碳当量","page":93,"evidence":"范围二（基于位置） 182,178.63 吨二氧化碳当量","reason":"报告单独列示了基于位置的范围二排放量，口径标注清晰，且与范围一分列可区分。"},{"id":5,"rule_id":"GHG-03","rule_name":"范围二排放量（基于市场）","report":"changan","judgment":"否","confidence":"medium","disposition":"抽查","value":"752,014","unit":"吨二氧化碳当量","page":29,"evidence":"范围二 吨二氧化碳当量 2025年 752,014；绿电购买量 兆瓦时 1,784.01 7.41；绿电使用占比 15.42","reason":"报告仅披露范围二排放总量，未区分基于市场与基于位置口径，也未说明基于市场口径所依据的合同或绿证信息，不满足披露要求。"},{"id":6,"rule_id":"GHG-03","rule_name":"范围二排放量（基于市场）","report":"jianghuai","judgment":"部分","confidence":"medium","disposition":"抽查","value":"153,694.82","unit":"吨二氧化碳当量","page":93,"evidence":"范围二（基于市场） 153,694.82 吨二氧化碳当量……核算时已考虑外购绿电的影响。基于位置和基于市场的电力排放因子选取中国生态环保部发布的《关于发布2022年电力二氧化碳排放因子的公告》。","reason":"披露了基于市场范围二数值并提及考虑外购绿电影响，但未说明所依据的具体合同或绿证信息，且基于市场值低于基于位置值未作解释，披露不完整。"},{"id":7,"rule_id":"GHG-04","rule_name":"组织边界界定方法","report":"changan","judgment":"部分","confidence":"high","disposition":"自动放行","value":"","unit":"","page":29,"evidence":"确保组织边界与财务合并口径完全一致","reason":"仅说明组织边界与财务合并口径一致，未指明具体采用哪一种组织边界界定方法（如运营控制权法或股权比例法），方法未指明。"},{"id":8,"rule_id":"GHG-04","rule_name":"组织边界界定方法","report":"jianghuai","judgment":"部分","confidence":"medium","disposition":"抽查","value":"","unit":"","page":93,"evidence":"温室气体及综合能耗统计口径为并表范围内20家制造型企业以及技术中心、物流公司，其他环境数据统计口径为并表范围内18家制造型企业以及技术中心（不含已停止运营的新能源轻型物流车分公司、安徽江淮专用汽车有限公司）。","reason":"报告说明了温室气体核算的合并范围（并表范围内20家制造型企业及技术中心、物流公司），但未明确指明采用哪一种组织边界界定方法（如运营控制权法、财务控制权法或股权比例法），属方法未指明的不完整披露。"},{"id":9,"rule_id":"GHG-05","rule_name":"运营边界与排放源识别","report":"changan","judgment":"部分","confidence":"medium","disposition":"抽查","value":"","unit":"","page":29,"evidence":"范围三包括：类别1（外购商品和服务）、类别3（燃料和能源相关活动含未包括在范围一和范围二中的部分）、类别5（运营中产生的废弃物）、类别6（商务旅行）、类别7（雇员通勤）、类别11（售出产品的使用）、类别15（投资）","reason":"报告仅列示范围三的类别构成，未说明范围一、范围二运营边界内包含的具体排放源类型（如自有车队、固定燃烧等），排放源识别不完整。"},{"id":10,"rule_id":"GHG-05","rule_name":"运营边界与排放源识别","report":"jianghuai","judgment":"是","confidence":"high","disposition":"自动放行","value":"","unit":"","page":93,"evidence":"核算边界包括范围一（移动源、固定源燃烧、制程排放及逸散排放）和范围二（外购电力和热力，取基于市场值）","reason":"报告明确说明了运营边界内范围一包含移动源、固定源燃烧、制程排放及逸散排放等排放源类型，并列出范围二外购电力和热力，排放源识别完整规范。"},{"id":11,"rule_id":"GHG-06","rule_name":"核算标准与排放因子来源","report":"changan","judgment":"部分","confidence":"high","disposition":"自动放行","value":"","unit":"","page":29,"evidence":"仍遵循国际通用的《温室气体核算体系》（GHG Protocol）标准","reason":"报告指明了核算标准为GHG Protocol，但未标注具体版本，且未提及排放因子来源，披露不完整。"},{"id":12,"rule_id":"GHG-06","rule_name":"核算标准与排放因子来源","report":"jianghuai","judgment":"是","confidence":"high","disposition":"自动放行","value":"","unit":"","page":93,"evidence":"温室气体排放核算遵循ISO 14064-1标准……基于位置和基于市场的电力排放因子选取中国生态环保部发布的《关于发布2022年电力二氧化碳排放因子的公告》。","reason":"已明确核算标准名称（ISO 14064-1）及电力排放因子来源（生态环境部2022年电力二氧化碳排放因子公告），满足要求。"},{"id":13,"rule_id":"GHG-07","rule_name":"基准年与基准年排放","report":"changan","judgment":"部分","confidence":"high","disposition":"自动放行","value":"","unit":"","page":28,"evidence":"目标 企业端 2030年 降低 35% 万元产值二氧化碳排放 较2020年","reason":"报告设定了以2020年为基准年的减排目标，但未披露基准年（2020年）的排放量绝对值，也未说明基准年数据的重算规则，披露不完整。"},{"id":14,"rule_id":"GHG-07","rule_name":"基准年与基准年排放","report":"jianghuai","judgment":"否","confidence":"medium","disposition":"抽查","value":"","unit":"","page":100,"evidence":"附录二：上交所指标索引 披露要求 对应的本报告章节 应对气候变化 共生·绿色发展－应对气候变化","reason":"报告片段未披露减排目标的基准年、基准年排放量及重算规则，索引亦未指向具体基准年数据。"},{"id":15,"rule_id":"GHG-08","rule_name":"排放强度指标","report":"changan","judgment":"是","confidence":"high","disposition":"自动放行","value":"0.0575","unit":"吨二氧化碳当量/万元","page":120,"evidence":"万元产值二氧化碳排放量（企业端）6 吨二氧化碳当量/万元 0.0617 0.0614 0.0575","reason":"报告披露了万元产值二氧化碳排放强度指标，分母口径为万元产值，并在绩效表中明确标注单位，口径一致。"},{"id":16,"rule_id":"GHG-08","rule_name":"排放强度指标","report":"jianghuai","judgment":"是","confidence":"high","disposition":"自动放行","value":"0.049","unit":"吨二氧化碳当量/人民币万元营收","page":93,"evidence":"范围一、二排放强度（万元营收） 0.049 吨二氧化碳当量/人民币万元营收","reason":"报告披露了范围一、二排放强度指标，并在指标名称中明确分母为万元营收，分母口径清晰。"},{"id":17,"rule_id":"GHG-09","rule_name":"范围三排放","report":"changan","judgment":"部分","confidence":"high","disposition":"自动放行","value":"46,638,132","unit":"吨二氧化碳当量","page":29,"evidence":"范围三包括：类别1（外购商品和服务）、类别3（燃料和能源相关活动含未包括在范围一和范围二中的部分）、类别5（运营中产生的废弃物）、类别6（商务旅行）、类别7（雇员通勤）、类别11（售出产品的使用）、类别15（投资）；2025年 190,728 752,014 46,638,132","reason":"已披露范围三总量及覆盖的7个类别，但未说明数据获取方式，披露不完整。"},{"id":18,"rule_id":"GHG-09","rule_name":"范围三排放","report":"jianghuai","judgment":"部分","confidence":"medium","disposition":"抽查","value":"","unit":"","page":66,"evidence":"公司每年制定重点车型供应商碳盘查计划，覆盖电池、钢铁、铝合金等关键物料，用于核算整车碳足迹","reason":"仅披露供应链碳盘查覆盖电池、钢铁、铝合金等关键物料及供应商数据填报，未明确说明范围三排放是否核算、覆盖的具体范围三类别及数据获取方式，内容不完整。"},{"id":19,"rule_id":"GHG-10","rule_name":"第三方鉴证","report":"changan","judgment":"否","confidence":"high","disposition":"自动放行","value":"","unit":"","page":133,"evidence":"2-5外部鉴证 所在章节/页码标注为「/」","reason":"GRI索引中外部鉴证条目章节与页码均标注为「/」，视为报告未披露第三方鉴证的机构、范围与保证等级。"},{"id":20,"rule_id":"GHG-10","rule_name":"第三方鉴证","report":"jianghuai","judgment":"是","confidence":"high","disposition":"自动放行","value":"","unit":"","page":101,"evidence":"SGS集团已根据ISAE3000等国际公认的鉴证标准……鉴证标准 ISAE3000 有限保证……鉴证范围包括对详细列于下面的特定绩效信息的质量、准确性和可靠性进行评估","reason":"报告披露了第三方鉴证机构（SGS-CSTC）、鉴证标准（ISAE3000）、保证等级（有限保证）及鉴证范围，满足要求。"}];
+const STATIC = {"stats":[["核查条目",20,"条",""],["判定一致率","90%","18/20 与人工基准一致","pv"],["自动放行",14,"条（高置信）",""],["建议抽查",6,"条（中置信）","pv"]],"top":[{"rule_id":"GHG-03","name":"范围二排放量（基于市场）","n":1},{"rule_id":"GHG-09","name":"范围三排放","n":1}],"disp":[{"confidence":"high","disposition":"自动放行","n":14},{"confidence":"medium","disposition":"抽查","n":6},{"confidence":"low","disposition":"人工复核","n":0}]};
+/* 复核样例：标注为示例，展示人机分工；不代表真实用户操作，不含内部评测字段 */
+const SAMPLE_REVIEWS = {
+  6:  {verdict:"需修改", comment:"机器判「部分」；对照 p93 原文，两种口径数值均已列示，复核后调整判定并回填理由（示例）"},
+  8:  {verdict:"同意机器判定", comment:"证据页码与机器理由一致，采纳机器判定（示例）"},
+  14: {verdict:"证据不足待定", comment:"仅有索引条目，未指向基准年数据，待补充原件后复核（示例）"}
+};
+let CUR = null, GD = 0;
+const $ = s => document.querySelector(s);
+const shortRep = r => (r||"").replace(/(changan|jianghuai)/g,"") || r;
+const repName = r => r==="changan" ? "长安" : r==="jianghuai" ? "江淮" : r;
+
+/* ---------- 导航（全部可见，无角色） ---------- */
+const TABS = [
+  {t:"intro",label:"介绍"},{t:"results",label:"核查结果"},
+  {t:"review",label:"人工复核"},{t:"board",label:"评测看板"}
+];
+function renderNav(){
+  $("#nav").innerHTML = TABS.map(x=>`<button data-t="${x.t}" class="${view()===x.t?'active':''}">${x.label}</button>`).join("");
+  document.querySelectorAll("#nav button").forEach(b => b.onclick = () => location.hash = "#/"+b.dataset.t);
+}
+function view(){ return (location.hash||"#/intro").replace(/^#\//,"") || "intro"; }
+window.addEventListener("hashchange", () => applyView());
+function applyView(){
+  const t = view();
+  if(!TABS.find(x=>x.t===t)){ location.hash = "#/intro"; return; }
+  renderNav();
+  document.querySelectorAll("main section").forEach(s => s.classList.add("hide"));
+  $("#t-"+t).classList.remove("hide");
+  if(t==="results") renderResults();
+  if(t==="review") renderQueue();
+  if(t==="board") renderBoard();
+}
+
+/* ---------- 引导弹窗 ---------- */
+const GUIDE = [
+  {tag:"使用说明",h:"使用说明",cover:true,
+   body:`<p style="text-align:center;color:var(--muted);margin-top:6px">30 秒看懂：这是什么、怎么读结果、怎么复核。</p>
+   <p style="text-align:center;margin-top:10px;color:var(--purple)">点「开始阅读」往下看，或点右上「跳过」直接进入核查结果。</p>`},
+  {tag:"这是什么 · 2/4",h:"先说痛点",
+   body:`<p>一份 ESG 报告动辄上百页，温室气体（GHG）披露散落在表格、脚注和附注里，各家口径还不统一——人工逐条核查 10 项披露要求，费时、易漏、难对比。</p>
+   <p style="margin-top:8px"><b style="color:var(--ink);font-weight:600">这个工具解决它：</b>机器通读报告，逐条给出「披露了没有 / 口径规范吗 / 证据第几页」，与人工基准一致率 90%；机器没把握的才交给人复核。</p>`},
+  {tag:"怎么读结果 · 3/4",h:"三色标记 = 机器的把握程度",
+   body:`<p style="margin-bottom:10px">
+   <span class="pill p-high">蓝 · 自动放行</span>&nbsp;机器高置信，可直接采用<br><br>
+   <span class="pill p-medium">黄 · 抽查</span>&nbsp;建议核对页码原文<br><br>
+   <span class="pill p-low">红 · 人工复核</span>&nbsp;必须查看报告原件</p>
+   <p>每条结论附原文页码和证据摘录，可回溯验证。机器结论不替代审计意见。</p>`},
+  {tag:"开始使用 · 4/4",h:"点「开始使用」直接进入核查结果",
+   body:`<p>① 在「核查结果」点任意行，展开机器理由和证据原文；</p>
+   <p style="margin-top:6px">② 切到「人工复核」，看一条复核样例如何对照证据给出结论；</p>
+   <p style="margin-top:6px">③ 想看数字怎么来的，在介绍页点开「评测方法与复现」。</p>`}
+];
+function openGuide(){ GD=0; $("#guide-mask").classList.remove("hide"); renderGuide(); }
+function closeGuide(jump){
+  $("#guide-mask").classList.add("hide");
+  localStorage.setItem("esg_static_guide_seen","1");
+  if(jump) location.hash = "#/results";
+}
+function guideNext(){ if(GD>=GUIDE.length-1){ closeGuide(true); return; } GD++; renderGuide(); }
+function renderGuide(){
+  const g = GUIDE[GD];
+  $("#gd-tag").textContent = g.tag;
+  $("#gd-body").innerHTML = g.cover
+    ? `<h3 style="font-size:22px;text-align:center;margin:18px 0 4px;color:var(--blue)">${g.h}</h3>${g.body}`
+    : `<h3>${g.h}</h3>${g.body}`;
+  $("#gd-dots").innerHTML = GUIDE.map((_,i)=>`<i class="${i===GD?'on':''}"></i>`).join("");
+  $("#gd-next").textContent = GD===0 ? "开始阅读 →" : (GD===GUIDE.length-1 ? "开始使用 →" : "下一步");
+}
+$("#btn-guide").onclick = openGuide;
+
+/* ---------- 核查结果 ---------- */
+function renderResults(){
+  const fr=$("#f-report").value, fd=$("#f-disp").value, fc=$("#f-conf").value, q=$("#f-q").value.trim();
+  const rows = DATA.filter(r=>
+    (!fr || repName(r.report).includes(fr)) && (!fd || r.disposition===fd) &&
+    (!fc || r.confidence===fc) && (!q || (r.rule_id+r.rule_name).includes(q)));
+  const n = k => DATA.filter(r=>r.disposition===k).length;
+  $("#stat-chips").innerHTML =
+    `<span>共 ${DATA.length} 条</span><span style="background:var(--blue-bg);color:var(--blue)">自动放行 ${n("自动放行")}</span>`+
+    `<span style="background:var(--amber-bg);color:var(--amber-tx)">抽查 ${n("抽查")}</span>`+
+    `<span style="background:var(--red-bg);color:var(--red-tx)">人工复核 ${n("人工复核")}</span>`;
+  const pill = c => `<span class="pill p-${c}">${c}</span>`;
+  const disp = c => `<span class="pill ${c==="自动放行"?"p-high":"p-purple"}">${c}</span>`;
+  const tb = $("#res-body"); tb.innerHTML = "";
+  for(const r of rows){
+    tb.insertAdjacentHTML("beforeend",
+      `<tr class="rowlink" onclick="toggleDetail(${r.id})">
+        <td><b style="font-weight:600">${r.rule_id}</b></td><td>${r.rule_name}</td><td>${repName(r.report)}</td>
+        <td>${r.judgment}</td><td>${r.value?r.value+" "+(r.unit||""):"—"}</td><td>${r.page?"p"+r.page:"—"}</td>
+        <td>${pill(r.confidence)}</td><td>${disp(r.disposition)}</td></tr>`);
+    tb.insertAdjacentHTML("beforeend",
+      `<tr class="detail-cell hide" id="d-${r.id}"><td colspan="8">
+        <b style="font-weight:600">机器理由</b>　${r.reason||"—"}
+        ${r.evidence?`<div class="evi"><b>证据 · 报告 p${r.page||"?"} 原文摘录</b>${r.evidence}</div>`:""}
+        <span class="hint">置信度 ${r.confidence} · 处置 ${r.disposition}${r.disposition!=="自动放行"?` · <a href="javascript:void(0)" onclick="goReview(${r.id})" style="color:var(--purple)">去复核 →</a>`:""}</span>
+      </td></tr>`);
+  }
+  if(!rows.length) tb.innerHTML = `<tr><td colspan="8" class="muted">没有符合条件的条目</td></tr>`;
+}
+["f-report","f-disp","f-conf"].forEach(id=>$("#"+id).onchange=renderResults);
+$("#f-q").oninput = renderResults;
+function toggleDetail(id){ $("#d-"+id).classList.toggle("hide"); }
+function goReview(id){ location.hash="#/review"; setTimeout(()=>selectQueue(id), 80); }
+
+/* ---------- 人工复核（展示一条复核样例，说明人机分工） ---------- */
+function renderQueue(){
+  const q = DATA.filter(r=>r.disposition!=="自动放行");
+  const box = $("#rv-queue");
+  box.innerHTML = `<div class="hint" style="margin-bottom:8px">建议抽验队列 · ${q.length} 条</div>` +
+    (q.map(r=>`<div class="queue-item" id="q-${r.id}" onclick="selectQueue(${r.id})">
+      <b style="font-weight:600">${r.rule_id} · ${repName(r.report)}</b>　<span class="pill ${r.confidence==="high"?"p-high":r.confidence==="medium"?"p-medium":"p-low"}">${r.disposition}</span><br>
+      机器=${r.judgment}（${r.confidence}）</div>`).join("") || `<div class="muted">队列为空：全部条目已自动放行。</div>`);
+  if(q.length) selectQueue(q[0].id);
+}
+function selectQueue(id){
+  const r = DATA.find(x=>x.id===id); if(!r) return;
+  CUR = r;
+  document.querySelectorAll(".queue-item").forEach(x=>x.classList.toggle("sel", x.id==="q-"+id));
+  $("#rv-detail").innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <b style="font-weight:600;font-size:14px">${r.rule_id} ${r.rule_name} · ${repName(r.report)}</b>
+      <span class="pill p-medium">${r.disposition}</span>
+    </div>
+    <div class="muted" style="margin-bottom:4px">机器判定：<b style="color:var(--ink)">${r.judgment}</b>（置信度 ${r.confidence}）　披露值：${r.value?r.value+" "+(r.unit||""):"—"}</div>
+    ${r.evidence?`<div class="evi"><b>证据 · 报告 p${r.page||"?"} 原文摘录</b>${r.evidence}</div>`:`<div class="evi" style="border-left-color:#d3d1c7"><b style="color:var(--hint)">证据</b>无摘录，请对照报告原件第 ${r.page||"—"} 页</div>`}
+    <div class="muted"><b style="color:var(--ink);font-weight:600">机器理由</b>　${r.reason||"—"}</div>
+    ${reviewSample(r)}`;
+}
+/* 一条标注为示例的复核记录：展示「机器结论 + 人工复核意见」的分工，不代表真实用户操作 */
+function reviewSample(r){
+  const sample = SAMPLE_REVIEWS[r.id];
+  if(!sample) return `<div class="evi" style="border-left-color:var(--purple);margin-top:10px">
+    <b style="color:var(--purple)">复核样例</b>此条为机器判定示例，可用左侧队列查看其它条目的证据与理由。</div>`;
+  return `<div class="evi" style="border-left-color:var(--purple);margin-top:10px">
+    <b style="color:var(--purple)">复核样例 · 示例（非真实用户操作）</b>
+    <div style="margin-top:6px"><span class="pill ${sample.verdict==="需修改"?"p-medium":"p-high"}">${sample.verdict}</span>
+      <span class="muted" style="font-size:12px">　复核意见：${sample.comment}</span></div>
+    <div class="muted" style="margin-top:6px;font-size:12px">留痕：复核结论与意见写回记录，用于看板统计修改率、反哺规则库。</div>
+  </div>`;
+}
+function toast(msg){
+  const t=document.createElement("div"); t.className="toast"; t.textContent=msg;
+  document.body.appendChild(t); setTimeout(()=>t.remove(), 2200);
+}
+
+/* ---------- 评测看板（静态真实指标） ---------- */
+function renderBoard(){
+  $("#bd-stats").innerHTML = STATIC.stats.map(x=>`<div class="stat ${x[3]}"><b>${x[1]}</b><span>${x[0]} · ${x[2]}</span></div>`).join("");
+  const maxM = Math.max(1, ...STATIC.top.map(r=>r.n));
+  $("#bd-top").innerHTML = STATIC.top.map(r=>
+    `<div class="bar-row"><span><b style="font-weight:600">${r.rule_id}</b> ${r.name}</span>
+     <div class="bar"><i class="p" style="width:${Math.round(r.n/maxM*100)}%"></i></div>
+     <span class="muted">${r.n} 条</span></div>`).join("");
+  const maxN = Math.max(1, ...STATIC.disp.map(r=>r.n));
+  const cls = c => c==="high"?"b":c==="medium"?"a":"p";
+  $("#bd-conf").innerHTML = STATIC.disp.map(r=>
+    `<div class="bar-row"><span>${r.confidence} · ${r.disposition}</span>
+     <div class="bar"><i class="${cls(r.confidence)}" style="width:${Math.round(r.n/maxN*100)}%"></i></div>
+     <span class="muted">${r.n} 条</span></div>`).join("");
+}
+
+/* ---------- 启动 ---------- */
+renderNav(); applyView();
+/* 首次进入自动展示封面引导；看过一次后不再打扰，可用顶栏「详细说明」随时唤起 */
+if(!localStorage.getItem("esg_static_guide_seen")) openGuide();
+</script>
+</body>
+</html>
